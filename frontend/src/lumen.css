@@ -1,0 +1,728 @@
+/*
+ * Lumen: the second interface of Orion. Everything here applies only while <html data-experience="lumen"> is set, so the classic
+ * interface is exactly what it was. Colour, type, radius and shadows come from the Lumen themes (theme/themes.ts) through the same
+ * variables as always; this file adds what variables cannot: the shape of the shell, the way surfaces answer the pointer, and motion.
+ *
+ * Reduced motion (the person's setting or the device's) removes every animation below.
+ */
+
+html[data-experience='lumen'] {
+  /* Module colours: each area of the application has a hue of its own, used on the dock, the launcher and the Today page. */
+  --lumen-indigo: #6366f1;
+  --lumen-blue: #3b82f6;
+  --lumen-cyan: #06b6d4;
+  --lumen-teal: #14b8a6;
+  --lumen-green: #10b981;
+  --lumen-amber: #f59e0b;
+  --lumen-orange: #f97316;
+  --lumen-coral: #f43f5e;
+  --lumen-pink: #ec4899;
+  --lumen-violet: #8b5cf6;
+  --lumen-slate: #64748b;
+
+  --lumen-dock-w: 5.25rem;
+  --lumen-dock-open: 16.5rem;
+  --lumen-ease: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+/* ----------------------------------------------------------------------------------------------------------- the canvas */
+
+/* Slow light drifting behind everything: three soft blobs of the theme's colours. Painted once on a fixed layer, never on scroll. */
+html[data-experience='lumen'] .lumen-canvas {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--orion-bg);
+}
+
+html[data-experience='lumen'] .lumen-canvas::before,
+html[data-experience='lumen'] .lumen-canvas::after {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+html[data-experience='lumen'] .lumen-canvas::before {
+  width: 38rem;
+  height: 38rem;
+  left: -8rem;
+  top: -10rem;
+  background: radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--orion-primary) 38%, transparent), transparent 70%);
+  animation: lumen-drift-a 26s ease-in-out infinite alternate;
+}
+
+html[data-experience='lumen'] .lumen-canvas::after {
+  width: 34rem;
+  height: 34rem;
+  right: -9rem;
+  bottom: -12rem;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--orion-violet) 34%, transparent), transparent 70%);
+  animation: lumen-drift-b 32s ease-in-out infinite alternate;
+}
+
+html[data-experience='lumen'].dark .lumen-canvas::before,
+html[data-experience='lumen'].dark .lumen-canvas::after {
+  opacity: 0.42;
+}
+
+@keyframes lumen-drift-a {
+  to { transform: translate3d(14rem, 9rem, 0) scale(1.15); }
+}
+
+@keyframes lumen-drift-b {
+  to { transform: translate3d(-16rem, -7rem, 0) scale(1.2); }
+}
+
+/* ------------------------------------------------------------------------------------------------------------- type */
+
+html[data-experience='lumen'] body {
+  font-feature-settings: 'ss01' off, 'cv11' off;
+  letter-spacing: -0.003em;
+}
+
+html[data-experience='lumen'] h1,
+html[data-experience='lumen'] h2,
+html[data-experience='lumen'] h3,
+html[data-experience='lumen'] .t-h1,
+html[data-experience='lumen'] .t-h2,
+html[data-experience='lumen'] .t-h3 {
+  font-family: var(--orion-font-display);
+  font-weight: var(--orion-display-weight);
+  letter-spacing: var(--orion-display-tracking);
+}
+
+html[data-experience='lumen'] .t-h1 {
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  line-height: 1.08;
+}
+
+html[data-experience='lumen'] .eyebrow {
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--orion-accent) 78%, var(--orion-text-faint));
+}
+
+/* ------------------------------------------------------------------------------------------------------------ surfaces */
+
+html[data-experience='lumen'] .panel {
+  border-color: color-mix(in srgb, var(--orion-border) 62%, transparent);
+  background-image: radial-gradient(26rem circle at var(--mx, -40rem) var(--my, -40rem), color-mix(in srgb, var(--orion-accent) 10%, transparent), transparent 62%);
+  transition:
+    box-shadow var(--orion-dur-base) var(--orion-ease),
+    transform var(--orion-dur-base) var(--orion-ease),
+    border-color var(--orion-dur-base) var(--orion-ease);
+}
+
+html[data-experience='lumen'] .panel:hover {
+  border-color: color-mix(in srgb, var(--orion-accent) 28%, var(--orion-border));
+}
+
+html[data-experience='lumen'] .panel.data-hot:hover,
+html[data-experience='lumen'] a.panel:hover,
+html[data-experience='lumen'] button.panel:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--orion-shadow-raised);
+}
+
+html[data-experience='lumen'] .overlay {
+  border-color: color-mix(in srgb, var(--orion-border) 60%, transparent);
+}
+
+html[data-experience='lumen'] .btn-primary {
+  border-color: transparent;
+  box-shadow: var(--orion-glow), 0 6px 16px -8px color-mix(in srgb, var(--orion-primary) 80%, transparent);
+  font-weight: 650;
+}
+
+html[data-experience='lumen'] .btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--orion-glow), 0 10px 22px -8px color-mix(in srgb, var(--orion-primary) 85%, transparent);
+}
+
+html[data-experience='lumen'] input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+html[data-experience='lumen'] select,
+html[data-experience='lumen'] textarea {
+  border-color: color-mix(in srgb, var(--orion-border-strong) 55%, transparent);
+  background-color: color-mix(in srgb, var(--orion-surface) 78%, var(--orion-muted));
+}
+
+html[data-experience='lumen'] input:not([type='checkbox']):not([type='radio']):focus,
+html[data-experience='lumen'] select:focus,
+html[data-experience='lumen'] textarea:focus {
+  background-color: var(--orion-surface);
+}
+
+/* Tabs become a pill track with a floating thumb: the gliding bar is stretched to fill the chosen tab. */
+html[data-experience='lumen'] [role='tablist'] {
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border: 1px solid color-mix(in srgb, var(--orion-border) 70%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--orion-muted) 70%, transparent);
+  width: fit-content;
+  max-width: 100%;
+}
+
+html[data-experience='lumen'] [role='tablist'] > [role='tab'] {
+  position: relative;
+  z-index: 1;
+  border-radius: 999px;
+  padding-inline: 1rem;
+  padding-block: 0.45rem;
+}
+
+html[data-experience='lumen'] [role='tablist'] > .accent-fill {
+  top: 0.3rem;
+  bottom: 0.3rem;
+  height: auto !important;
+  border-radius: 999px;
+  opacity: 0.18;
+}
+
+/* Tables read as rows of a list rather than a grid. */
+html[data-experience='lumen'] table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+html[data-experience='lumen'] thead th {
+  letter-spacing: 0.1em;
+}
+
+html[data-experience='lumen'] tbody tr {
+  transition: background-color var(--orion-dur-fast) var(--orion-ease);
+}
+
+html[data-experience='lumen'] tbody tr:hover > td {
+  background-color: color-mix(in srgb, var(--orion-accent) 6%, transparent);
+}
+
+/* The data table: a soft sheet, a glass header that stays in view, airy rows with a rule under each, a bar of accent on the row you are over. */
+html[data-experience='lumen'] .lumen-table {
+  border-color: transparent;
+  border-radius: 1.5rem;
+  background: var(--orion-surface-fill);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--orion-border) 60%, transparent), var(--orion-shadow-card);
+}
+
+html[data-experience='lumen'] .lumen-table thead tr {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+html[data-experience='lumen'] .lumen-table thead th {
+  padding-block: 0.85rem;
+  background: color-mix(in srgb, var(--orion-surface) 86%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid color-mix(in srgb, var(--orion-border) 80%, transparent);
+}
+
+html[data-experience='lumen'] .lumen-table tbody tr {
+  background: transparent;
+  border-bottom: 0;
+}
+
+html[data-experience='lumen'] .lumen-table tbody td {
+  padding-block: 0.8rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--orion-border) 42%, transparent);
+}
+
+html[data-experience='lumen'] .lumen-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+html[data-experience='lumen'] .lumen-table tbody td:first-child {
+  font-weight: 650;
+}
+
+html[data-experience='lumen'] .lumen-table tbody tr:hover > td:first-child {
+  box-shadow: inset 3px 0 0 var(--orion-accent);
+}
+
+html[data-experience='lumen'] tbody td {
+  border-bottom-color: color-mix(in srgb, var(--orion-border) 55%, transparent);
+}
+
+html[data-experience='lumen'] thead th {
+  background-color: color-mix(in srgb, var(--orion-surface) 88%, transparent);
+}
+
+html[data-experience='lumen'] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html[data-experience='lumen'] a:focus-visible,
+html[data-experience='lumen'] button:focus-visible,
+html[data-experience='lumen'] [role='tab']:focus-visible,
+html[data-experience='lumen'] [role='radio']:focus-visible,
+html[data-experience='lumen'] [role='option']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--orion-accent) 55%, transparent);
+}
+
+/* -------------------------------------------------------------------------------------------------------------- motion */
+
+@keyframes lumen-rise {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes lumen-rise-soft {
+  from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes lumen-pop {
+  from { opacity: 0; transform: scale(0.92) translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes lumen-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes lumen-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--orion-primary) 45%, transparent); }
+  60% { box-shadow: 0 0 0 12px transparent; }
+}
+
+@keyframes lumen-confetti {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(0.6); }
+}
+
+html[data-experience='lumen'] .page-enter {
+  animation: lumen-rise 560ms var(--lumen-ease) both;
+}
+
+html[data-experience='lumen'] main .panel {
+  animation: lumen-rise-soft 640ms var(--lumen-ease) both;
+}
+
+html[data-experience='lumen'] main .panel:nth-child(2) { animation-delay: 60ms; }
+html[data-experience='lumen'] main .panel:nth-child(3) { animation-delay: 110ms; }
+html[data-experience='lumen'] main .panel:nth-child(4) { animation-delay: 160ms; }
+html[data-experience='lumen'] main .panel:nth-child(5) { animation-delay: 210ms; }
+html[data-experience='lumen'] main .panel:nth-child(6) { animation-delay: 260ms; }
+
+html[data-experience='lumen'] .pop-in,
+html[data-experience='lumen'] .toast-in {
+  animation: lumen-pop 260ms var(--lumen-ease) both;
+}
+
+/* ---------------------------------------------------------------------------------------------------------- the shell */
+
+.lumen-dock {
+  width: var(--lumen-dock-w);
+  transition: width 340ms var(--lumen-ease);
+}
+
+.lumen-dock[data-open='true'] {
+  width: var(--lumen-dock-open);
+}
+
+/* Labels: gone at once when the sidebar folds (so they never wrap while it narrows), and eased in after it has opened. */
+.lumen-dock-label {
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 90ms linear;
+}
+
+.lumen-dock[data-open='true'] .lumen-dock-label {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 200ms ease-out 140ms;
+}
+
+/* Folded: every icon sits in the middle of the column, group names give way to a thin rule, and nothing can scroll sideways. */
+.lumen-dock[data-open='false'] .lumen-dock-item,
+.lumen-dock[data-open='false'] .lumen-dock-brand {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.lumen-dock[data-open='false'] .lumen-dock-label {
+  display: none;
+}
+
+.lumen-dock[data-open='true'] .lumen-dock-rule {
+  display: none;
+}
+
+.lumen-dock-item {
+  --hue: var(--orion-accent);
+}
+
+.lumen-dock-item[aria-current='page'] .lumen-chip {
+  background-image: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 60%, var(--orion-violet)));
+  color: #fff;
+  box-shadow: 0 8px 18px -8px var(--hue);
+}
+
+.lumen-chip {
+  background: color-mix(in srgb, var(--hue) 13%, transparent);
+  color: var(--hue);
+  transition: transform 260ms var(--lumen-ease), background 260ms var(--lumen-ease), box-shadow 260ms var(--lumen-ease);
+}
+
+.lumen-dock-item:hover .lumen-chip {
+  transform: translateY(-2px) scale(1.06);
+  background: color-mix(in srgb, var(--hue) 22%, transparent);
+}
+
+.lumen-dock-item[aria-current='page']:hover .lumen-chip {
+  background-image: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 60%, var(--orion-violet)));
+}
+
+.lumen-orb {
+  animation: lumen-float 7s ease-in-out infinite;
+}
+
+.lumen-pulse {
+  animation: lumen-glow-pulse 2.4s ease-out infinite;
+}
+
+.lumen-confetti {
+  position: fixed;
+  z-index: 200;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: lumen-confetti 1100ms cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* A content area that leaves room for the sidebar, and moves with it. */
+@media (min-width: 1024px) {
+  html[data-experience='lumen'] .lumen-main {
+    padding-left: calc(var(--lumen-dock-w) + 1.5rem);
+    transition: padding-left 340ms var(--lumen-ease);
+  }
+
+  html[data-experience='lumen'] .lumen-main[data-open='true'] {
+    padding-left: calc(var(--lumen-dock-open) + 1.5rem);
+  }
+}
+
+/* The phone's floating tab bar leaves room at the bottom of the page. */
+@media (max-width: 1023.98px) {
+  html[data-experience='lumen'] .lumen-main {
+    padding-bottom: 5.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------- reduced motion */
+
+html[data-motion='reduced'][data-experience='lumen'] *,
+html[data-motion='reduced'][data-experience='lumen'] *::before,
+html[data-motion='reduced'][data-experience='lumen'] *::after {
+  animation: none !important;
+  transition-duration: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-experience='lumen'] *,
+  html[data-experience='lumen'] *::before,
+  html[data-experience='lumen'] *::after {
+    animation: none !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------------- catalog */
+
+html[data-experience='lumen'] .lumen-catalog-active {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--hue) 22%, transparent), color-mix(in srgb, var(--hue) 6%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hue) 35%, transparent);
+}
+
+/* ------------------------------------------------------------------------------------------------------ dashboards */
+
+/* A headline figure sits on a pool of its own colour. The tone the dashboard gave it picks the hue. */
+html[data-experience='lumen'] .panel.lumen-kpi {
+  --hue: var(--lumen-indigo);
+  background-image:
+    radial-gradient(26rem circle at var(--mx, -40rem) var(--my, -40rem), color-mix(in srgb, var(--hue) 12%, transparent), transparent 62%),
+    radial-gradient(120% 95% at 0% 0%, color-mix(in srgb, var(--hue) 13%, transparent), transparent 62%);
+}
+
+html[data-experience='lumen'] .lumen-kpi[data-tone='emerald'] { --hue: var(--lumen-green); }
+html[data-experience='lumen'] .lumen-kpi[data-tone='blue'] { --hue: var(--lumen-blue); }
+html[data-experience='lumen'] .lumen-kpi[data-tone='teal'] { --hue: var(--lumen-teal); }
+html[data-experience='lumen'] .lumen-kpi[data-tone='rose'] { --hue: var(--lumen-coral); }
+html[data-experience='lumen'] .lumen-kpi[data-tone='violet'] { --hue: var(--lumen-violet); }
+html[data-experience='lumen'] .lumen-kpi[data-tone='amber'] { --hue: var(--lumen-amber); }
+
+html[data-experience='lumen'] .lumen-kpi::after {
+  content: '';
+  position: absolute;
+  right: -3.5rem;
+  top: -3.5rem;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--hue) 30%, transparent), transparent 68%);
+  pointer-events: none;
+  transition: transform 600ms var(--lumen-ease);
+}
+
+html[data-experience='lumen'] .lumen-kpi:hover::after {
+  transform: scale(1.35);
+}
+
+html[data-experience='lumen'] .lumen-kpi > header span[aria-hidden='true'] {
+  background: color-mix(in srgb, var(--hue) 16%, transparent);
+  color: var(--hue);
+}
+
+/* The figure itself: large, in the display face, washed from the text colour into the card's hue. */
+html[data-experience='lumen'] .lumen-figure {
+  font-family: var(--orion-font-display);
+  font-weight: var(--orion-display-weight);
+  letter-spacing: -0.035em;
+  background-image: linear-gradient(120deg, var(--orion-text) 35%, color-mix(in srgb, var(--hue, var(--orion-accent)) 78%, var(--orion-text)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* A card is a size container, and its figure is sized from the card's width: every card in a row draws its figure the same size, on one line, and a narrow card shrinks it instead of wrapping. */
+html[data-experience='lumen'] .panel.lumen-kpi {
+  container-type: inline-size;
+}
+
+html[data-experience='lumen'] .lumen-kpi .lumen-figure {
+  font-size: clamp(1.1rem, 8.5cqw, 1.9rem);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Lines of label and figure in a card (a figure that is really a short list, such as the TDS by quarter). */
+html[data-experience='lumen'] .lumen-kpi-rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chapter titles and chart titles get a mark of the accent. */
+html[data-experience='lumen'] .lumen-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 1.35rem;
+}
+
+html[data-experience='lumen'] .lumen-section-title::before {
+  content: '';
+  width: 0.4rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background-image: var(--orion-highlight-fill);
+  flex: none;
+}
+
+html[data-experience='lumen'] .lumen-chart {
+  border-radius: 1.75rem;
+}
+
+html[data-experience='lumen'] .lumen-chart:hover {
+  box-shadow: var(--orion-shadow-raised);
+}
+
+html[data-experience='lumen'] .lumen-chart h3 {
+  font-size: 1rem;
+}
+
+html[data-experience='lumen'] .lumen-title {
+  background-image: linear-gradient(110deg, var(--orion-text) 30%, var(--orion-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: fit-content;
+}
+
+html[data-experience='lumen'] .tip-surface {
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--orion-surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* The views of a dashboard: a pill track, the chosen one lit with the accent. */
+html[data-experience='lumen'] .lumen-viewtabs {
+  border-radius: 999px;
+  padding: 0.3rem;
+  border: 1px solid color-mix(in srgb, var(--orion-border) 70%, transparent);
+  background: color-mix(in srgb, var(--orion-muted) 72%, transparent);
+}
+
+html[data-experience='lumen'] .lumen-viewtabs a {
+  border-radius: 999px;
+  padding-inline: 0.95rem;
+}
+
+html[data-experience='lumen'] .lumen-viewtabs a[aria-current='page'] {
+  background-image: var(--orion-primary-fill);
+  color: var(--orion-on-primary);
+  box-shadow: 0 6px 16px -8px var(--orion-primary);
+}
+
+html[data-experience='lumen'] .lumen-viewtabs a[aria-current='page'] svg {
+  color: inherit;
+}
+
+/* ------------------------------------------------------------------------------------------------- history timeline */
+
+html[data-experience='lumen'] .lumen-timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+html[data-experience='lumen'] .lumen-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(var(--orion-accent), transparent);
+  opacity: 0.35;
+}
+
+html[data-experience='lumen'] .lumen-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.4rem;
+  top: 1.1rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--orion-surface);
+  border: 3px solid var(--orion-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--orion-accent) 18%, transparent);
+}
+
+/* --------------------------------------------------------------------------------------------------- empty states */
+
+html[data-experience='lumen'] .lumen-empty-icon {
+  padding: 1.1rem;
+  color: #fff;
+  background-image: var(--orion-primary-fill);
+  box-shadow: 0 14px 30px -12px var(--orion-primary);
+  animation: lumen-float 6s ease-in-out infinite;
+}
+
+html[data-experience='lumen'] .lumen-empty-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* A panel that slides over the page (the catalog on a phone) must be solid: the page behind it would show through the words. */
+html[data-experience='lumen'] .drawer-in .panel,
+html[data-experience='lumen'] .drawer-in.panel {
+  background-color: var(--orion-surface);
+  background-image: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ----------------------------------------------------------------------------------------------- money side panels */
+
+/* A column of panels beside the bill is narrower than the screen the panels were designed for: their rows of figures take two columns, not four. */
+html[data-experience='lumen'] .lumen-aside dl.grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+
+/* ------------------------------------------------------------------------------------------------------ messages */
+
+/* One soft glass sheet for the conversations and the thread, round rows, bubbles in the accent. */
+html[data-experience='lumen'] .chat-shell {
+  border-radius: 2rem;
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--orion-surface) 62%, transparent);
+  backdrop-filter: blur(22px);
+  box-shadow: var(--orion-shadow-card, 0 18px 50px -28px rgba(0, 0, 0, 0.55));
+}
+
+html[data-experience='lumen'] .chat-list,
+html[data-experience='lumen'] .chat-head,
+html[data-experience='lumen'] .chat-composer {
+  background: transparent;
+}
+
+html[data-experience='lumen'] .chat-search {
+  border-radius: 999px;
+  padding-left: 2.6rem;
+}
+
+html[data-experience='lumen'] .chat-row-wrap {
+  padding: 0.0625rem 0.5rem;
+}
+
+html[data-experience='lumen'] .chat-row {
+  border-radius: 1.25rem;
+}
+
+html[data-experience='lumen'] .chat-row[aria-current='true'] {
+  background-image: linear-gradient(120deg, color-mix(in srgb, var(--orion-accent) 24%, transparent), color-mix(in srgb, var(--orion-accent) 5%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--orion-accent) 30%, transparent);
+}
+
+html[data-experience='lumen'] .chat-bubble {
+  border-radius: 1.4rem;
+}
+
+html[data-experience='lumen'] .chat-bubble-mine {
+  background-image: var(--orion-primary-fill);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--orion-accent) 70%, transparent);
+}
+
+html[data-experience='lumen'] .chat-input,
+html[data-experience='lumen'] .chat-bar {
+  border-radius: 1.75rem;
+}
+
+html[data-experience='lumen'] .chat-send {
+  border-radius: 999px;
+  background-image: var(--orion-primary-fill);
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--orion-accent) 75%, transparent);
+}
+
+/* Calls and voice notes in Messages: round tinted call buttons, and the call lines in the thread as soft glass pills. */
+html[data-experience='lumen'] .chat-call-button {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--orion-accent) 14%, transparent);
+  color: var(--orion-accent);
+}
+
+html[data-experience='lumen'] .chat-call-button:hover {
+  background: color-mix(in srgb, var(--orion-accent) 26%, transparent);
+}
+
+html[data-experience='lumen'] .chat-call-line {
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--orion-surface) 70%, transparent);
+}
+
+/* The message box is one rounded bar: the writing area inside it takes the bar's colour, not a field of its own. */
+html[data-experience='lumen'] .chat-bar textarea,
+html[data-experience='lumen'] .chat-bar textarea:focus {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+/* The people in the list: a quiet wash under the open conversation, the name and time a little stronger. */
+html[data-experience='lumen'] .chat-compose {
+  border-radius: 999px;
+}

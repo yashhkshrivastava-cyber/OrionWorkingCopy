@@ -1,0 +1,91 @@
+# Runs on every pull request and on main. Make these checks required in the repository's branch protection
+# (Settings > Branches > main > "Require status checks to pass": backend, frontend, dependency-audit), or a red run
+# can still be merged. Run the same commands locally with the steps in DEVELOPMENT.md, "Before you open a pull request".
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend
+    # Windows, because that is where Orion runs (paths, line endings and the shell scripts behave differently there).
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+            backend/constraints.txt
+      - name: Install dependencies (the pinned versions, exactly as deploy installs them)
+        run: python -m pip install -r backend/requirements-dev.txt -c backend/constraints.txt
+      - name: Lint (finds likely bugs such as unused or missing names and swallowed errors)
+        run: python -m ruff check backend
+      - name: Tests (there is no database here, so the tests that need one stay skipped)
+        run: python -m pytest backend/tests -q
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Lint (hooks called conditionally, missing effect dependencies, and the clear accessibility mistakes)
+        run: npm run lint
+      - name: Type-check and production build (the dev server does not type-check; the production build does)
+        run: npm run build
+      - name: The app starts without downloading every page
+        run: npm run check:bundle
+      - name: Themes keep readable contrast
+        run: npm run check:themes
+      - name: Bill numbers are links, and other screens open in a new tab
+        run: npm run check:links
+      - name: The bill preview adds up exactly as the server does
+        run: npm run check:bill
+      - name: Money fields show Indian commas and the amount in words correctly
+        run: npm run check:money
+      - name: Lumen tables colour the right columns
+        run: npm run check:lumen
+
+  dependency-audit:
+    name: dependency-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Python packages with a known vulnerability
+        run: |
+          python -m pip install pip-audit
+          pip-audit -r backend/constraints.txt --disable-pip --no-deps
+      - name: npm packages with a known vulnerability (high or worse, shipped code only)
+        working-directory: frontend
+        run: npm audit --omit=dev --audit-level=high

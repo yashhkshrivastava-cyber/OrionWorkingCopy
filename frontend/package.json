@@ -1,0 +1,50 @@
+{
+  "name": "orion-frontend",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint .",
+    "check:themes": "node scripts/check-themes.mjs",
+    "check:bill": "node scripts/check-bill-vectors.mjs",
+    "check:money": "node scripts/check-money-input.mjs",
+    "check:attendance": "node scripts/check-attendance.mjs",
+    "check:filters": "node scripts/check-column-filters.mjs",
+    "check:links": "node scripts/check-bill-links.mjs",
+    "check:lumen": "node scripts/check-lumen.mjs",
+    "check:bundle": "node scripts/check-bundle.mjs"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-sql": "^6.10.0",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/search": "^6.7.2",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@lezer/highlight": "^1.2.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "codemirror": "^6.0.2",
+    "lucide-react": "^1.65.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5",
+    "recharts": "^2.15.0",
+    "sql-formatter": "^15.9.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "oxlint": "1.90.0",
+    "typescript": "~7.0.2",
+    "vite": "^6.4.5"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  }
+}

@@ -1,0 +1,25 @@
+# Python lint for Orion (the backend). Run from the repo root:  python -m ruff check backend
+#
+# Rules are chosen to find bugs, not to restyle: nothing here reformats code, and `ruff format` is deliberately not enforced
+# (it would rewrite most files and bury `git blame`). Format code you write; do not reformat code you did not change.
+target-version = "py312"
+line-length = 160
+src = ["backend"]
+extend-exclude = ["frontend", "data", ".cursor"]
+
+[lint]
+select = [
+    "E4", "E7", "E9",  # imports in the wrong place, statements that are not valid, syntax errors
+    "F",               # pyflakes: unused imports and variables, undefined names, repeated dictionary keys
+    "B",               # bugbear: likely bugs (a loop variable captured late, `raise` without `from`, ...)
+    "PLE",             # pylint errors (a bare `raise` outside a handler, a backspace character where \b was meant)
+    "S110", "S112",    # `except: pass` / `except: continue`: a swallowed error needs a stated reason (see below)
+]
+ignore = [
+    "B008",  # FastAPI declares dependencies as defaults: `user = Depends(...)`
+    "B905",  # `zip(strict=...)`: the zipped lists are built together
+]
+
+# A failure that is swallowed on purpose says why, on the same line:
+#     except Exception:  # noqa: BLE001, S110 - never raise from a finaliser
+#         pass

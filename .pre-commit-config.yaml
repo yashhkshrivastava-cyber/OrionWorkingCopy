@@ -1,0 +1,24 @@
+# Checks that run on `git commit`, so a problem is caught on your PC and not in review. Optional, and the same checks run in CI.
+#   pip install pre-commit      (once, anywhere; it is not part of Orion's own requirements)
+#   pre-commit install          (once per clone)
+# Run them on everything:  pre-commit run --all-files
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=1500"]
+      - id: detect-private-key
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.3
+    hooks:
+      - id: ruff-check
+  - repo: local
+    hooks:
+      - id: oxlint
+        name: oxlint (the frontend)
+        entry: npm --prefix frontend run lint
+        language: system
+        files: ^frontend/.*\.(ts|tsx|js|mjs)$
+        pass_filenames: false

@@ -1,0 +1,45 @@
+# Opens a pull request when a pinned dependency has an update, so upgrades are small, tested by CI and reviewed one by one
+# instead of arriving unseen at deploy time. Security fixes are opened immediately regardless of the schedule.
+#
+# Built to avoid the pile-up the first run caused (ten pull requests at once, three of them fighting over the same files):
+#  * one pull request per ecosystem for everything that is safe to take together (minor and patch updates, and all the
+#    GitHub Actions), so two pull requests never edit the same workflow file or lockfile;
+#  * a major upgrade is its own pull request, and the ones that cannot pass alone are ignored until someone plans them.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      python-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Each of these is a migration, not a bump. Remove its entry when you decide to do it (see DEVELOPMENT.md, "Dependencies").
+      # recharts 3: changes the chart types our tooltips, labels and axes are written against (Bridge, CategoryBar, MonthlyChart).
+      - dependency-name: recharts
+        update-types: ["version-update:semver-major"]
+      # vite 8 and @vitejs/plugin-react 6 need each other, so neither installs alone; upgrade them in one change.
+      - dependency-name: vite
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitejs/plugin-react"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    # Every action in one pull request: they all live in ci.yml, so separate ones conflict with each other.
+    groups:
+      github-actions:
+        patterns: ["*"]

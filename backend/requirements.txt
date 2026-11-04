@@ -1,0 +1,21 @@
+# Direct dependencies, pinned to the versions the tests ran against. Transitive packages are locked in constraints.txt;
+# install with:  pip install -r backend/requirements.txt -c backend/constraints.txt
+# To upgrade: change a pin here, reinstall, run the tests, then refresh constraints.txt (see DEVELOPMENT.md, "Dependencies").
+fastapi==0.162.0
+uvicorn[standard]==0.54.0
+psycopg2-binary==2.9.13
+bcrypt==5.0.0
+python-dotenv==1.2.4
+bharatpin==1.0.1
+python-multipart==0.0.33
+pillow==13.0.0
+pillow-heif==1.8.1
+reportlab==5.1.0
+uharfbuzz==0.57.0
+pyrage==1.4.0
+boto3==1.43.123
+pypdf==6.21.4
+cryptography==50.0.2
+anthropic==2.3.0
+httpx==0.28.1
+openai==3.42.0

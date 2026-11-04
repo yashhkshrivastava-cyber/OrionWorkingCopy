@@ -1,0 +1,3721 @@
+{
+ "about": "Golden vectors for bill arithmetic. backend/app/billing.py and frontend/src/billing/billCalc.ts must both produce exactly these figures (rupees, 2 decimals). 'vectors' are inputs both sides agree on; 'differences' are inputs they treat differently on purpose, each pinned with its reason. Regenerate only on purpose: a changed figure here is a change to what people are billed.",
+ "vectors": [
+  {
+   "name": "The 2026-27/202 invoice (Civil Surgeon Bhind), printed 9,19,149",
+   "lines": [
+    {
+     "particulars": "Skilled (SUPERVISOR)",
+     "qty": "3",
+     "rate": "15144"
+    },
+    {
+     "particulars": "UnSkilled (Safaikarmi)",
+     "qty": "46",
+     "rate": "12425"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "45432.00",
+     "571550.00"
+    ],
+    "lines_total": "616982.00",
+    "epf_amount": "80207.66",
+    "esic_amount": "20051.92",
+    "sub_total": "717241.58",
+    "service_amount": "61698.20",
+    "taxable_total": "778939.78",
+    "cgst_amount": "70104.58",
+    "sgst_amount": "70104.58",
+    "round_off": "0.06",
+    "grand_total": "919149.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Vehicle rent at 6% + 6% GST and nothing else",
+   "lines": [
+    {
+     "particulars": "Vehicle rent",
+     "qty": "1",
+     "rate": "34821.43"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "6",
+    "sgst_pct": "6"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "34821.43"
+    ],
+    "lines_total": "34821.43",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "34821.43",
+    "service_amount": "0.00",
+    "taxable_total": "34821.43",
+    "cgst_amount": "2089.29",
+    "sgst_amount": "2089.29",
+    "round_off": "-0.01",
+    "grand_total": "39000.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A bill with no percentages at all",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "2",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "200.00"
+    ],
+    "lines_total": "200.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "200.00",
+    "service_amount": "0.00",
+    "taxable_total": "200.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "200.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A rate with a half paisa rounds up",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "0.005"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.01"
+    ],
+    "lines_total": "0.01",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "0.01",
+    "service_amount": "0.00",
+    "taxable_total": "0.01",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.01",
+    "grand_total": "0.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A rate just under a half paisa rounds down",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "0.0049"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.00"
+    ],
+    "lines_total": "0.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "0.00",
+    "service_amount": "0.00",
+    "taxable_total": "0.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "0.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A fractional quantity",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "2.5",
+     "rate": "99.99"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "249.98"
+    ],
+    "lines_total": "249.98",
+    "epf_amount": "32.50",
+    "esic_amount": "8.12",
+    "sub_total": "290.60",
+    "service_amount": "25.00",
+    "taxable_total": "315.60",
+    "cgst_amount": "28.40",
+    "sgst_amount": "28.40",
+    "round_off": "-0.40",
+    "grand_total": "372.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A quantity of 0.0005 rounds up to 0.001",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "0.0005",
+     "rate": "1000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1.00"
+    ],
+    "lines_total": "1.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "1.00",
+    "service_amount": "0.00",
+    "taxable_total": "1.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "1.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A quantity just under that rounds to nothing and is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "0.0004",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Rate rounds before it multiplies",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "3",
+     "rate": "0.835"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "2.52"
+    ],
+    "lines_total": "2.52",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "2.52",
+    "service_amount": "0.00",
+    "taxable_total": "2.52",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.48",
+    "grand_total": "3.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A line amount that lands on a half paisa",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "0.5",
+     "rate": "0.01"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.01"
+    ],
+    "lines_total": "0.01",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "0.01",
+    "service_amount": "0.00",
+    "taxable_total": "0.01",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.01",
+    "grand_total": "0.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Every percentage rounds half up on a small total",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "0.50"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.50"
+    ],
+    "lines_total": "0.50",
+    "epf_amount": "0.07",
+    "esic_amount": "0.02",
+    "sub_total": "0.59",
+    "service_amount": "0.05",
+    "taxable_total": "0.64",
+    "cgst_amount": "0.06",
+    "sgst_amount": "0.06",
+    "round_off": "0.24",
+    "grand_total": "1.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Every percentage rounds half up on another small total",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "1.15"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1.15"
+    ],
+    "lines_total": "1.15",
+    "epf_amount": "0.15",
+    "esic_amount": "0.04",
+    "sub_total": "1.34",
+    "service_amount": "0.12",
+    "taxable_total": "1.46",
+    "cgst_amount": "0.13",
+    "sgst_amount": "0.13",
+    "round_off": "0.28",
+    "grand_total": "2.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A total that ends on exactly fifty paise rounds the bill up",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "Courier",
+     "kind": "amount",
+     "value": "0.50"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "100.00",
+    "service_amount": "0.00",
+    "taxable_total": "100.50",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.50",
+    "grand_total": "101.00",
+    "extras": [
+     "0.50"
+    ]
+   }
+  },
+  {
+   "name": "A total that ends just under fifty paise rounds the bill down",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "Courier",
+     "kind": "amount",
+     "value": "0.49"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "100.00",
+    "service_amount": "0.00",
+    "taxable_total": "100.49",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.49",
+    "grand_total": "100.00",
+    "extras": [
+     "0.49"
+    ]
+   }
+  },
+  {
+   "name": "GST at 2.5% + 2.5%",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "7",
+     "rate": "1234.56"
+    }
+   ],
+   "rates": {
+    "cgst_pct": "2.5",
+    "sgst_pct": "2.5"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "8641.92"
+    ],
+    "lines_total": "8641.92",
+    "epf_amount": "1123.45",
+    "esic_amount": "280.86",
+    "sub_total": "10046.23",
+    "service_amount": "864.19",
+    "taxable_total": "10910.42",
+    "cgst_amount": "272.76",
+    "sgst_amount": "272.76",
+    "round_off": "0.06",
+    "grand_total": "11456.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "GST at 14% + 14% and a different EPF and ESIC",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "12",
+     "rate": "8765.43"
+    }
+   ],
+   "rates": {
+    "epf_pct": "12",
+    "esic_pct": "0.75",
+    "service_pct": "7.5",
+    "cgst_pct": "14",
+    "sgst_pct": "14"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "105185.16"
+    ],
+    "lines_total": "105185.16",
+    "epf_amount": "12622.22",
+    "esic_amount": "788.89",
+    "sub_total": "118596.27",
+    "service_amount": "7888.89",
+    "taxable_total": "126485.16",
+    "cgst_amount": "17707.92",
+    "sgst_amount": "17707.92",
+    "round_off": "0.00",
+    "grand_total": "161901.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Percentages with two decimals",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "9",
+     "rate": "1111.11"
+    }
+   ],
+   "rates": {
+    "epf_pct": "13.33",
+    "esic_pct": "3.27",
+    "service_pct": "9.99",
+    "cgst_pct": "8.88",
+    "sgst_pct": "8.88"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "9999.99"
+    ],
+    "lines_total": "9999.99",
+    "epf_amount": "1333.00",
+    "esic_amount": "327.00",
+    "sub_total": "11659.99",
+    "service_amount": "999.00",
+    "taxable_total": "12658.99",
+    "cgst_amount": "1124.12",
+    "sgst_amount": "1124.12",
+    "round_off": "-0.23",
+    "grand_total": "14907.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A percentage given to more than two decimals rounds to two",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "13.005",
+    "esic_pct": "3.254",
+    "service_pct": "10",
+    "cgst_pct": "9",
+    "sgst_pct": "9"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1301.00",
+    "esic_amount": "325.00",
+    "sub_total": "11626.00",
+    "service_amount": "1000.00",
+    "taxable_total": "12626.00",
+    "cgst_amount": "1136.34",
+    "sgst_amount": "1136.34",
+    "round_off": "0.32",
+    "grand_total": "14899.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A percentage of exactly 100",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": "100",
+    "esic_pct": "100",
+    "service_pct": "100",
+    "cgst_pct": "100",
+    "sgst_pct": "100"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "100.00",
+    "esic_amount": "100.00",
+    "sub_total": "300.00",
+    "service_amount": "100.00",
+    "taxable_total": "400.00",
+    "cgst_amount": "400.00",
+    "sgst_amount": "400.00",
+    "round_off": "0.00",
+    "grand_total": "1200.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A percentage extra charge is on the lines total, not the sub total",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Uniform",
+     "kind": "pct",
+     "value": "2.5"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1000.00"
+    ],
+    "lines_total": "1000.00",
+    "epf_amount": "130.00",
+    "esic_amount": "32.50",
+    "sub_total": "1162.50",
+    "service_amount": "100.00",
+    "taxable_total": "1287.50",
+    "cgst_amount": "115.88",
+    "sgst_amount": "115.88",
+    "round_off": "-0.26",
+    "grand_total": "1519.00",
+    "extras": [
+     "25.00"
+    ]
+   }
+  },
+  {
+   "name": "A fixed extra charge is added as it is",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Uniform",
+     "kind": "amount",
+     "value": "250.75"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1000.00"
+    ],
+    "lines_total": "1000.00",
+    "epf_amount": "130.00",
+    "esic_amount": "32.50",
+    "sub_total": "1162.50",
+    "service_amount": "100.00",
+    "taxable_total": "1513.25",
+    "cgst_amount": "136.19",
+    "sgst_amount": "136.19",
+    "round_off": "0.37",
+    "grand_total": "1786.00",
+    "extras": [
+     "250.75"
+    ]
+   }
+  },
+  {
+   "name": "A percentage extra charge that needs rounding",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "33.33"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Uniform",
+     "kind": "pct",
+     "value": "12.5"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "33.33"
+    ],
+    "lines_total": "33.33",
+    "epf_amount": "4.33",
+    "esic_amount": "1.08",
+    "sub_total": "38.74",
+    "service_amount": "3.33",
+    "taxable_total": "46.24",
+    "cgst_amount": "4.16",
+    "sgst_amount": "4.16",
+    "round_off": "0.44",
+    "grand_total": "55.00",
+    "extras": [
+     "4.17"
+    ]
+   }
+  },
+  {
+   "name": "Several extra charges, both kinds",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "4",
+     "rate": "2500"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Uniform",
+     "kind": "pct",
+     "value": "1.5"
+    },
+    {
+     "label": "Training",
+     "kind": "amount",
+     "value": "999.99"
+    },
+    {
+     "label": "Medical",
+     "kind": "pct",
+     "value": "0.25"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "11625.00",
+    "service_amount": "1000.00",
+    "taxable_total": "13799.99",
+    "cgst_amount": "1242.00",
+    "sgst_amount": "1242.00",
+    "round_off": "0.01",
+    "grand_total": "16284.00",
+    "extras": [
+     "150.00",
+     "999.99",
+     "25.00"
+    ]
+   }
+  },
+  {
+   "name": "A zero extra charge",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Nothing",
+     "kind": "amount",
+     "value": "0"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1000.00"
+    ],
+    "lines_total": "1000.00",
+    "epf_amount": "130.00",
+    "esic_amount": "32.50",
+    "sub_total": "1162.50",
+    "service_amount": "100.00",
+    "taxable_total": "1262.50",
+    "cgst_amount": "113.63",
+    "sgst_amount": "113.63",
+    "round_off": "0.24",
+    "grand_total": "1490.00",
+    "extras": [
+     "0.00"
+    ]
+   }
+  },
+  {
+   "name": "An extra charge with a name and no value is a charge of nothing",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Nothing",
+     "kind": "amount",
+     "value": ""
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1000.00"
+    ],
+    "lines_total": "1000.00",
+    "epf_amount": "130.00",
+    "esic_amount": "32.50",
+    "sub_total": "1162.50",
+    "service_amount": "100.00",
+    "taxable_total": "1262.50",
+    "cgst_amount": "113.63",
+    "sgst_amount": "113.63",
+    "round_off": "0.24",
+    "grand_total": "1490.00",
+    "extras": [
+     "0.00"
+    ]
+   }
+  },
+  {
+   "name": "A blank line and a blank extra charge are ignored",
+   "lines": [
+    {
+     "particulars": "",
+     "qty": "",
+     "rate": ""
+    },
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "500"
+    },
+    {
+     "particulars": "  ",
+     "qty": " ",
+     "rate": " "
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "",
+     "kind": "pct",
+     "value": ""
+    },
+    {
+     "label": "  ",
+     "kind": "amount",
+     "value": " "
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "500.00"
+    ],
+    "lines_total": "500.00",
+    "epf_amount": "65.00",
+    "esic_amount": "16.25",
+    "sub_total": "581.25",
+    "service_amount": "50.00",
+    "taxable_total": "631.25",
+    "cgst_amount": "56.81",
+    "sgst_amount": "56.81",
+    "round_off": "0.13",
+    "grand_total": "745.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Ten lines",
+   "lines": [
+    {
+     "particulars": "Post 1",
+     "qty": "1",
+     "rate": "10137.01"
+    },
+    {
+     "particulars": "Post 2",
+     "qty": "2",
+     "rate": "10274.02"
+    },
+    {
+     "particulars": "Post 3",
+     "qty": "3",
+     "rate": "10411.03"
+    },
+    {
+     "particulars": "Post 4",
+     "qty": "4",
+     "rate": "10548.04"
+    },
+    {
+     "particulars": "Post 5",
+     "qty": "5",
+     "rate": "10685.05"
+    },
+    {
+     "particulars": "Post 6",
+     "qty": "6",
+     "rate": "10822.06"
+    },
+    {
+     "particulars": "Post 7",
+     "qty": "7",
+     "rate": "10959.07"
+    },
+    {
+     "particulars": "Post 8",
+     "qty": "8",
+     "rate": "11096.08"
+    },
+    {
+     "particulars": "Post 9",
+     "qty": "9",
+     "rate": "11233.09"
+    },
+    {
+     "particulars": "Post 10",
+     "qty": "10",
+     "rate": "11370.10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10137.01",
+     "20548.04",
+     "31233.09",
+     "42192.16",
+     "53425.25",
+     "64932.36",
+     "76713.49",
+     "88768.64",
+     "101097.81",
+     "113701.00"
+    ],
+    "lines_total": "602748.85",
+    "epf_amount": "78357.35",
+    "esic_amount": "19589.34",
+    "sub_total": "700695.54",
+    "service_amount": "60274.89",
+    "taxable_total": "760970.43",
+    "cgst_amount": "68487.34",
+    "sgst_amount": "68487.34",
+    "round_off": "-0.11",
+    "grand_total": "897945.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A very large bill",
+   "lines": [
+    {
+     "particulars": "Manpower",
+     "qty": "100000",
+     "rate": "123456.78"
+    },
+    {
+     "particulars": "Equipment",
+     "qty": "999.999",
+     "rate": "98765.43"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Bonus",
+     "kind": "pct",
+     "value": "8.33"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "12345678000.00",
+     "98765331.23"
+    ],
+    "lines_total": "12444443331.23",
+    "epf_amount": "1617777633.06",
+    "esic_amount": "404444408.26",
+    "sub_total": "14466665372.55",
+    "service_amount": "1244444333.12",
+    "taxable_total": "16747731835.16",
+    "cgst_amount": "1507295865.16",
+    "sgst_amount": "1507295865.16",
+    "round_off": "-0.48",
+    "grand_total": "19762323565.00",
+    "extras": [
+     "1036622129.49"
+    ]
+   }
+  },
+  {
+   "name": "A rate of zero is allowed",
+   "lines": [
+    {
+     "particulars": "Free item",
+     "qty": "1",
+     "rate": "0"
+    },
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.00",
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "10.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "10.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Surrounding spaces are ignored",
+   "lines": [
+    {
+     "particulars": "  Item  ",
+     "qty": " 2 ",
+     "rate": " 10.5 "
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "21.00"
+    ],
+    "lines_total": "21.00",
+    "epf_amount": "2.73",
+    "esic_amount": "0.68",
+    "sub_total": "24.41",
+    "service_amount": "2.10",
+    "taxable_total": "26.51",
+    "cgst_amount": "2.39",
+    "sgst_amount": "2.39",
+    "round_off": "-0.29",
+    "grand_total": "31.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A number that starts with a point or ends with one",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": ".5",
+     "rate": "10."
+    },
+    {
+     "particulars": "Item two",
+     "qty": "2.",
+     "rate": ".25"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "5.00",
+     "0.50"
+    ],
+    "lines_total": "5.50",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "5.50",
+    "service_amount": "0.00",
+    "taxable_total": "5.50",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.50",
+    "grand_total": "6.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A description is kept as typed, trimmed",
+   "lines": [
+    {
+     "particulars": "  Skilled  (A)  ",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "10.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "10.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A quantity of exactly one million is allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1000000",
+     "rate": "1"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "1000000.00"
+    ],
+    "lines_total": "1000000.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "1000000.00",
+    "service_amount": "0.00",
+    "taxable_total": "1000000.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "1000000.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A quantity over one million is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1000001",
+     "rate": "1"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A rate of exactly ten crore is allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100000000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100000000.00"
+    ],
+    "lines_total": "100000000.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "100000000.00",
+    "service_amount": "0.00",
+    "taxable_total": "100000000.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "100000000.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A rate over ten crore is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100000001"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A rate that rounds down to ten crore is allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100000000.004"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100000000.00"
+    ],
+    "lines_total": "100000000.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "100000000.00",
+    "service_amount": "0.00",
+    "taxable_total": "100000000.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "100000000.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A rate under half a paisa is a rate of zero",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "0.004"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "0.00"
+    ],
+    "lines_total": "0.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "0.00",
+    "service_amount": "0.00",
+    "taxable_total": "0.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "0.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A percentage of 100.004 is over 100 before it rounds, so it is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "cgst_pct": "100.004"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A percentage of 100.000 is allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "cgst_pct": "100.000"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "1.30",
+    "esic_amount": "0.33",
+    "sub_total": "11.63",
+    "service_amount": "1.00",
+    "taxable_total": "12.63",
+    "cgst_amount": "12.63",
+    "sgst_amount": "1.14",
+    "round_off": "-0.40",
+    "grand_total": "26.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A percentage extra charge of 100.004 is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "E",
+     "kind": "pct",
+     "value": "100.004"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A fixed extra charge of exactly ten crore is allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "E",
+     "kind": "amount",
+     "value": "100000000"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "100000010.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "100000010.00",
+    "extras": [
+     "100000000.00"
+    ]
+   }
+  },
+  {
+   "name": "A fixed extra charge over ten crore is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "E",
+     "kind": "amount",
+     "value": "100000001"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A fixed extra charge of half a paisa rounds up",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "E",
+     "kind": "amount",
+     "value": "0.005"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "10.01",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.01",
+    "grand_total": "10.00",
+    "extras": [
+     "0.01"
+    ]
+   }
+  },
+  {
+   "name": "Thirty lines are allowed",
+   "lines": [
+    {
+     "particulars": "Post 0",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 1",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 2",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 3",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 4",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 5",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 6",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 7",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 8",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 9",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 10",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 11",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 12",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 13",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 14",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 15",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 16",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 17",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 18",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 19",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 20",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 21",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 22",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 23",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 24",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 25",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 26",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 27",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 28",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 29",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00",
+     "10.00"
+    ],
+    "lines_total": "300.00",
+    "epf_amount": "39.00",
+    "esic_amount": "9.75",
+    "sub_total": "348.75",
+    "service_amount": "30.00",
+    "taxable_total": "378.75",
+    "cgst_amount": "34.09",
+    "sgst_amount": "34.09",
+    "round_off": "0.07",
+    "grand_total": "447.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Thirty-one lines are refused",
+   "lines": [
+    {
+     "particulars": "Post 0",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 1",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 2",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 3",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 4",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 5",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 6",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 7",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 8",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 9",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 10",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 11",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 12",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 13",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 14",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 15",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 16",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 17",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 18",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 19",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 20",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 21",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 22",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 23",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 24",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 25",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 26",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 27",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 28",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 29",
+     "qty": "1",
+     "rate": "10"
+    },
+    {
+     "particulars": "Post 30",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Six extra charges are allowed",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Charge 0",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 1",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 2",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 3",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 4",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 5",
+     "kind": "amount",
+     "value": "1"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "13.00",
+    "esic_amount": "3.25",
+    "sub_total": "116.25",
+    "service_amount": "10.00",
+    "taxable_total": "132.25",
+    "cgst_amount": "11.90",
+    "sgst_amount": "11.90",
+    "round_off": "-0.05",
+    "grand_total": "156.00",
+    "extras": [
+     "1.00",
+     "1.00",
+     "1.00",
+     "1.00",
+     "1.00",
+     "1.00"
+    ]
+   }
+  },
+  {
+   "name": "Seven extra charges are refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Charge 0",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 1",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 2",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 3",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 4",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 5",
+     "kind": "amount",
+     "value": "1"
+    },
+    {
+     "label": "Charge 6",
+     "kind": "amount",
+     "value": "1"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A long description and a long charge name are cut, not refused",
+   "lines": [
+    {
+     "particulars": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+     "kind": "amount",
+     "value": "1"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "11.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "11.00",
+    "extras": [
+     "1.00"
+    ]
+   }
+  },
+  {
+   "name": "A charge name with extra spaces is tidied",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [
+    {
+     "label": "  a    b  ",
+     "kind": "amount",
+     "value": "1"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10.00"
+    ],
+    "lines_total": "10.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10.00",
+    "service_amount": "0.00",
+    "taxable_total": "11.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "11.00",
+    "extras": [
+     "1.00"
+    ]
+   }
+  },
+  {
+   "name": "A percentage that ends with a point",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": "5."
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "5.00",
+    "esic_amount": "3.25",
+    "sub_total": "108.25",
+    "service_amount": "10.00",
+    "taxable_total": "118.25",
+    "cgst_amount": "10.64",
+    "sgst_amount": "10.64",
+    "round_off": "0.47",
+    "grand_total": "140.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A quantity and rate with more decimals than they keep",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "123456.7895",
+     "rate": "1.115"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "138271.60"
+    ],
+    "lines_total": "138271.60",
+    "epf_amount": "17975.31",
+    "esic_amount": "4493.83",
+    "sub_total": "160740.74",
+    "service_amount": "13827.16",
+    "taxable_total": "174567.90",
+    "cgst_amount": "15711.11",
+    "sgst_amount": "15711.11",
+    "round_off": "-0.12",
+    "grand_total": "205990.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "No lines is refused",
+   "lines": [],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Only blank lines is refused",
+   "lines": [
+    {
+     "particulars": "",
+     "qty": "",
+     "rate": ""
+    },
+    {
+     "particulars": " ",
+     "qty": " ",
+     "rate": " "
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A line with no description is refused",
+   "lines": [
+    {
+     "particulars": "",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A line with no quantity is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A quantity of zero is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "0",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A negative quantity is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "-1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A negative rate is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "-10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A rate that is not a number is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "ten"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A quantity with a comma is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1,000",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A quantity of NaN or Infinity is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "NaN",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A percentage over 100 is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "cgst_pct": "101"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A negative percentage is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "-1"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A percentage that is not a number is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {
+    "service_pct": "ten"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "An extra charge with no name is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "",
+     "kind": "amount",
+     "value": "5"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A percentage extra charge over 100 is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Too much",
+     "kind": "pct",
+     "value": "100.01"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "An extra charge that is not a number is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Bad",
+     "kind": "amount",
+     "value": "five"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A negative extra charge is refused",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Bad",
+     "kind": "amount",
+     "value": "-5"
+    }
+   ],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Day-based bill: persons are only shown, the amount is the daily wage x the total working days, 5,47,457 over four lines",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false,
+    "columns": [
+     {
+      "key": "area",
+      "label": "Area"
+     }
+    ]
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "HK Staff & Gardner Full Time",
+     "qty": "22",
+     "rate": "693",
+     "days": "481",
+     "fields": {
+      "area": "(B)"
+     }
+    },
+    {
+     "particulars": "HK Staff Part Time",
+     "qty": "6",
+     "rate": "347",
+     "days": "150",
+     "fields": {
+      "area": "(B)"
+     }
+    },
+    {
+     "particulars": "HK Staff Full Time",
+     "qty": "6",
+     "rate": "556",
+     "days": "146",
+     "fields": {
+      "area": "(C)"
+     }
+    },
+    {
+     "particulars": "HK Staff Part Time",
+     "qty": "14",
+     "rate": "278",
+     "days": "291",
+     "fields": {
+      "area": "(C)"
+     }
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "333333.00",
+     "52050.00",
+     "81176.00",
+     "80898.00"
+    ],
+    "lines_total": "547457.00",
+    "epf_amount": "71169.41",
+    "esic_amount": "17792.35",
+    "sub_total": "636418.76",
+    "service_amount": "54745.70",
+    "taxable_total": "691164.46",
+    "cgst_amount": "62204.80",
+    "sgst_amount": "62204.80",
+    "round_off": "-0.06",
+    "grand_total": "815574.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Daily rate times days times the quantity when the bill counts the quantity",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": true
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "3",
+     "rate": "500",
+     "days": "31"
+    },
+    {
+     "particulars": "Supervisor",
+     "qty": "1",
+     "rate": "750.50",
+     "days": "26.5"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "46500.00",
+     "19888.25"
+    ],
+    "lines_total": "66388.25",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "66388.25",
+    "service_amount": "0.00",
+    "taxable_total": "66388.25",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.25",
+    "grand_total": "66388.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Monthly rate for part of a 31-day month",
+   "setup": {
+    "basis": "monthly",
+    "qty_multiplies": true
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Car on rent",
+     "qty": "1",
+     "rate": "25000",
+     "days": "10"
+    },
+    {
+     "particulars": "Driver",
+     "qty": "2",
+     "rate": "10000.10",
+     "days": "15"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "8064.52",
+     "9677.52"
+    ],
+    "lines_total": "17742.04",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "17742.04",
+    "service_amount": "0.00",
+    "taxable_total": "17742.04",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.04",
+    "grand_total": "17742.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Monthly rate in February takes the 28 days of the month",
+   "setup": {
+    "basis": "monthly",
+    "qty_multiplies": true
+   },
+   "month": "2027-02",
+   "lines": [
+    {
+     "particulars": "Car on rent",
+     "qty": "1",
+     "rate": "25000",
+     "days": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "8928.57"
+    ],
+    "lines_total": "8928.57",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "8928.57",
+    "service_amount": "0.00",
+    "taxable_total": "8928.57",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.43",
+    "grand_total": "8929.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Monthly rate with the days of the month named by the bill",
+   "setup": {
+    "basis": "monthly",
+    "qty_multiplies": true,
+    "month_days": 30
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Car on rent",
+     "qty": "1",
+     "rate": "25000",
+     "days": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "8333.33"
+    ],
+    "lines_total": "8333.33",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "8333.33",
+    "service_amount": "0.00",
+    "taxable_total": "8333.33",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.33",
+    "grand_total": "8333.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Monthly rate with no days is the whole month",
+   "setup": {
+    "basis": "monthly",
+    "qty_multiplies": true
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Car on rent",
+     "qty": "1",
+     "rate": "34821.43"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "34821.43"
+    ],
+    "lines_total": "34821.43",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "34821.43",
+    "service_amount": "0.00",
+    "taxable_total": "34821.43",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "-0.43",
+    "grand_total": "34821.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Day-based bill with the usual charges, an amount charge, and GST on everything before it",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false,
+    "totals_row": true
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "HK Staff Full Time",
+     "qty": "6",
+     "rate": "556",
+     "days": "146"
+    },
+    {
+     "particulars": "HK Staff Part Time",
+     "qty": "14",
+     "rate": "278",
+     "days": "291"
+    }
+   ],
+   "rates": {},
+   "extras": [
+    {
+     "label": "Uniform",
+     "kind": "amount",
+     "value": "1500"
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "81176.00",
+     "80898.00"
+    ],
+    "lines_total": "162074.00",
+    "epf_amount": "21069.62",
+    "esic_amount": "5267.41",
+    "sub_total": "188411.03",
+    "service_amount": "16207.40",
+    "taxable_total": "206118.43",
+    "cgst_amount": "18550.66",
+    "sgst_amount": "18550.66",
+    "round_off": "0.25",
+    "grand_total": "243220.00",
+    "extras": [
+     "1500.00"
+    ]
+   }
+  },
+  {
+   "name": "Own columns and column names do not change a figure",
+   "setup": {
+    "basis": "unit",
+    "labels": {
+     "qty": "Nos",
+     "amount": "Total"
+    },
+    "columns": [
+     {
+      "key": "c1",
+      "label": "Area"
+     },
+     {
+      "key": "c2",
+      "label": "Shift"
+     }
+    ]
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Skilled (Supervisor)",
+     "qty": "3",
+     "rate": "15144",
+     "fields": {
+      "c1": "B",
+      "c2": "Day"
+     }
+    },
+    {
+     "particulars": "UnSkilled (Safaikarmi)",
+     "qty": "46",
+     "rate": "12425",
+     "fields": {
+      "c1": "C"
+     }
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "45432.00",
+     "571550.00"
+    ],
+    "lines_total": "616982.00",
+    "epf_amount": "80207.66",
+    "esic_amount": "20051.92",
+    "sub_total": "717241.58",
+    "service_amount": "61698.20",
+    "taxable_total": "778939.78",
+    "cgst_amount": "70104.58",
+    "sgst_amount": "70104.58",
+    "round_off": "0.06",
+    "grand_total": "919149.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Day-based bill refused: no days on a daily line",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "3",
+     "rate": "500"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Day-based bill refused: days of zero",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "3",
+     "rate": "500",
+     "days": "0"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Day-based bill refused: the quantity counts but the line has none",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": true
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "",
+     "rate": "500",
+     "days": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Day-based bill: the quantity may be left empty when it is not counted",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false
+   },
+   "month": "2026-10",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "",
+     "rate": "500",
+     "days": "10"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "5000.00"
+    ],
+    "lines_total": "5000.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "5000.00",
+    "service_amount": "0.00",
+    "taxable_total": "5000.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "5000.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Bill with EPFO, ESIC, service charges, CGST and SGST all entered by hand, as in the 5,47,457 wages sheet",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "HK Staff & Gardner Full Time",
+     "qty": "22",
+     "rate": "693",
+     "days": "481"
+    },
+    {
+     "particulars": "HK Staff Part Time",
+     "qty": "6",
+     "rate": "347",
+     "days": "150"
+    },
+    {
+     "particulars": "HK Staff Full Time",
+     "qty": "6",
+     "rate": "556",
+     "days": "146"
+    },
+    {
+     "particulars": "HK Staff Part Time",
+     "qty": "14",
+     "rate": "278",
+     "days": "291"
+    }
+   ],
+   "rates": {
+    "epf_pct": "13",
+    "esic_pct": "3.25",
+    "service_pct": "3.85"
+   },
+   "extras": [],
+   "manual": {
+    "epf_amount": "68682",
+    "esic_amount": "19121",
+    "service_amount": "22645",
+    "cgst_amount": "59211",
+    "sgst_amount": "59211"
+   },
+   "expect": {
+    "ok": true,
+    "lines": [
+     "333333.00",
+     "52050.00",
+     "81176.00",
+     "80898.00"
+    ],
+    "lines_total": "547457.00",
+    "epf_amount": "68682.00",
+    "esic_amount": "19121.00",
+    "sub_total": "635260.00",
+    "service_amount": "22645.00",
+    "taxable_total": "657905.00",
+    "cgst_amount": "59211.00",
+    "sgst_amount": "59211.00",
+    "round_off": "0.00",
+    "grand_total": "776327.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Charges are taken of the lines that are not left out of them",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    },
+    {
+     "particulars": "Vehicle (no charges)",
+     "qty": "1",
+     "rate": "50000",
+     "skip": [
+      "epf",
+      "esic",
+      "service"
+     ]
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00",
+     "50000.00"
+    ],
+    "lines_total": "60000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "61625.00",
+    "service_amount": "1000.00",
+    "taxable_total": "62625.00",
+    "cgst_amount": "5636.25",
+    "sgst_amount": "5636.25",
+    "round_off": "0.50",
+    "grand_total": "73898.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A line can be left out of one charge only",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    },
+    {
+     "particulars": "Supervisor (no ESIC)",
+     "qty": "2",
+     "rate": "20000",
+     "skip": [
+      "esic"
+     ]
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00",
+     "40000.00"
+    ],
+    "lines_total": "50000.00",
+    "epf_amount": "6500.00",
+    "esic_amount": "325.00",
+    "sub_total": "56825.00",
+    "service_amount": "5000.00",
+    "taxable_total": "61825.00",
+    "cgst_amount": "5564.25",
+    "sgst_amount": "5564.25",
+    "round_off": "0.50",
+    "grand_total": "72954.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Charges entered by hand stand even when they do not match the percentage, and GST follows them",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "manual": {
+    "epf_amount": "1000",
+    "service_amount": "0"
+   },
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1000.00",
+    "esic_amount": "325.00",
+    "sub_total": "11325.00",
+    "service_amount": "0.00",
+    "taxable_total": "11325.00",
+    "cgst_amount": "1019.25",
+    "sgst_amount": "1019.25",
+    "round_off": "0.50",
+    "grand_total": "13364.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A charge with no percentage can still be entered as an amount",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "manual": {
+    "service_amount": "750.50"
+   },
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10000.00",
+    "service_amount": "750.50",
+    "taxable_total": "10750.50",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.50",
+    "grand_total": "10751.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A line amount entered by hand replaces the worked-out one",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000",
+     "amount_manual": "9999.99"
+    },
+    {
+     "particulars": "Driver",
+     "qty": "1",
+     "rate": "500"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "9999.99",
+     "500.00"
+    ],
+    "lines_total": "10499.99",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "10499.99",
+    "service_amount": "0.00",
+    "taxable_total": "10499.99",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.01",
+    "grand_total": "10500.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A line may be only a description and an amount",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Lump sum for uniforms",
+     "qty": "",
+     "rate": "",
+     "amount_manual": "12500"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "12500.00"
+    ],
+    "lines_total": "12500.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "12500.00",
+    "service_amount": "0.00",
+    "taxable_total": "12500.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "12500.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A day-based line entered by hand needs no days or quantity",
+   "setup": {
+    "basis": "daily",
+    "qty_multiplies": false
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Staff",
+     "qty": "",
+     "rate": "",
+     "amount_manual": "40000.40",
+     "skip": [
+      "epf"
+     ]
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "40000.40"
+    ],
+    "lines_total": "40000.40",
+    "epf_amount": "0.00",
+    "esic_amount": "1300.01",
+    "sub_total": "41300.41",
+    "service_amount": "4000.04",
+    "taxable_total": "45300.45",
+    "cgst_amount": "4077.04",
+    "sgst_amount": "4077.04",
+    "round_off": "0.47",
+    "grand_total": "53455.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Entered amount refused: not a number",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000",
+     "amount_manual": "abc"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Entered amount refused: below zero",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000",
+     "amount_manual": "-5"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Entered charge refused: not a number",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "manual": {
+    "epf_amount": "x"
+   },
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Entered charge refused: more than a thousand crore",
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {
+    "epf_pct": "0",
+    "esic_pct": "0",
+    "service_pct": "0",
+    "cgst_pct": "0",
+    "sgst_pct": "0"
+   },
+   "extras": [],
+   "manual": {
+    "cgst_amount": "10000000000.01"
+   },
+   "expect": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Service charge taken on the lines with the EPFO and ESIC",
+   "setup": {
+    "service_on": "lines_epf_esic"
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "11625.00",
+    "service_amount": "1162.50",
+    "taxable_total": "12787.50",
+    "cgst_amount": "1150.88",
+    "sgst_amount": "1150.88",
+    "round_off": "-0.26",
+    "grand_total": "15089.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Service charge on the lines with the EPFO and ESIC follows an EPFO entered by hand",
+   "setup": {
+    "service_on": "lines_epf_esic"
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "manual": {
+    "epf_amount": "1000",
+    "esic_amount": "0"
+   },
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1000.00",
+    "esic_amount": "0.00",
+    "sub_total": "11000.00",
+    "service_amount": "1100.00",
+    "taxable_total": "12100.00",
+    "cgst_amount": "1089.00",
+    "sgst_amount": "1089.00",
+    "round_off": "0.00",
+    "grand_total": "14278.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Service charge on the lines with the EPFO and ESIC leaves out a line that is not part of it",
+   "setup": {
+    "service_on": "lines_epf_esic"
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    },
+    {
+     "particulars": "Vehicle (no charges)",
+     "qty": "1",
+     "rate": "50000",
+     "skip": [
+      "epf",
+      "esic",
+      "service"
+     ]
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00",
+     "50000.00"
+    ],
+    "lines_total": "60000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "61625.00",
+    "service_amount": "1162.50",
+    "taxable_total": "62787.50",
+    "cgst_amount": "5650.88",
+    "sgst_amount": "5650.88",
+    "round_off": "-0.26",
+    "grand_total": "74089.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "Service charge on the lines with the EPFO and ESIC when the service is at 0% is nothing",
+   "setup": {
+    "service_on": "lines_epf_esic"
+   },
+   "month": "2026-07",
+   "lines": [
+    {
+     "particulars": "Guard",
+     "qty": "10",
+     "rate": "1000"
+    }
+   ],
+   "rates": {
+    "service_pct": "0"
+   },
+   "extras": [],
+   "expect": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "11625.00",
+    "service_amount": "0.00",
+    "taxable_total": "11625.00",
+    "cgst_amount": "1046.25",
+    "sgst_amount": "1046.25",
+    "round_off": "0.50",
+    "grand_total": "13718.00",
+    "extras": []
+   }
+  }
+ ],
+ "differences": [
+  {
+   "name": "Blank rate: the server reads it as 0, the preview asks for a rate",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": ""
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "why": "The editor never sends a blank rate (it sends the preview's own figures), so only another client could.",
+   "backend": {
+    "ok": true,
+    "lines": [
+     "0.00"
+    ],
+    "lines_total": "0.00",
+    "epf_amount": "0.00",
+    "esic_amount": "0.00",
+    "sub_total": "0.00",
+    "service_amount": "0.00",
+    "taxable_total": "0.00",
+    "cgst_amount": "0.00",
+    "sgst_amount": "0.00",
+    "round_off": "0.00",
+    "grand_total": "0.00",
+    "extras": []
+   },
+   "frontend": {
+    "ok": false
+   }
+  },
+  {
+   "name": "A quantity in scientific notation",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1e3",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "why": "Python's Decimal accepts it; the preview takes plain numbers only. The editor cannot send it.",
+   "backend": {
+    "ok": true,
+    "lines": [
+     "10000.00"
+    ],
+    "lines_total": "10000.00",
+    "epf_amount": "1300.00",
+    "esic_amount": "325.00",
+    "sub_total": "11625.00",
+    "service_amount": "1000.00",
+    "taxable_total": "12625.00",
+    "cgst_amount": "1136.25",
+    "sgst_amount": "1136.25",
+    "round_off": "0.50",
+    "grand_total": "14898.00",
+    "extras": []
+   },
+   "frontend": {
+    "ok": false
+   }
+  },
+  {
+   "name": "Blank percentage: the server uses the default, the preview reads 0",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "1",
+     "rate": "100"
+    }
+   ],
+   "rates": {
+    "epf_pct": ""
+   },
+   "extras": [],
+   "why": "The editor sends the number it shows (blank becomes 0), so the server never receives a blank percentage from it.",
+   "backend": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "13.00",
+    "esic_amount": "3.25",
+    "sub_total": "116.25",
+    "service_amount": "10.00",
+    "taxable_total": "126.25",
+    "cgst_amount": "11.36",
+    "sgst_amount": "11.36",
+    "round_off": "0.03",
+    "grand_total": "149.00",
+    "extras": []
+   },
+   "frontend": {
+    "ok": true,
+    "lines": [
+     "100.00"
+    ],
+    "lines_total": "100.00",
+    "epf_amount": "0.00",
+    "esic_amount": "3.25",
+    "sub_total": "103.25",
+    "service_amount": "10.00",
+    "taxable_total": "113.25",
+    "cgst_amount": "10.19",
+    "sgst_amount": "10.19",
+    "round_off": "0.37",
+    "grand_total": "134.00",
+    "extras": []
+   }
+  },
+  {
+   "name": "A plus sign",
+   "lines": [
+    {
+     "particulars": "Item",
+     "qty": "+2",
+     "rate": "10"
+    }
+   ],
+   "rates": {},
+   "extras": [],
+   "why": "Python's Decimal accepts it; the preview takes plain numbers only.",
+   "backend": {
+    "ok": true,
+    "lines": [
+     "20.00"
+    ],
+    "lines_total": "20.00",
+    "epf_amount": "2.60",
+    "esic_amount": "0.65",
+    "sub_total": "23.25",
+    "service_amount": "2.00",
+    "taxable_total": "25.25",
+    "cgst_amount": "2.27",
+    "sgst_amount": "2.27",
+    "round_off": "0.21",
+    "grand_total": "30.00",
+    "extras": []
+   },
+   "frontend": {
+    "ok": false
+   }
+  }
+ ]
+}
