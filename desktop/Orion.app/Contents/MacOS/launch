@@ -1,0 +1,54 @@
+#!/bin/bash
+# Started by the Mach-O stub inside Orion.app. Opens the local Orion site in a window.
+set -euo pipefail
+
+LOG="${HOME}/Library/Logs/Orion-launch.log"
+mkdir -p "${HOME}/Library/Logs"
+{
+  echo "$(date '+%Y-%m-%d %H:%M:%S')  launch begin"
+  echo "  \$0=$0"
+} >> "$LOG"
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+DESKTOP_DIR="$(cd "$HERE/../../.." && pwd)"
+REPO_FROM_BUNDLE="$(cd "$DESKTOP_DIR/.." && pwd)"
+SUPPORT_DIR="${HOME}/Library/Application Support/Orion"
+SUPPORT_FILE="${SUPPORT_DIR}/repo_root"
+
+REPO_ROOT=""
+if [ -f "$SUPPORT_FILE" ]; then
+  CANDIDATE="$(cat "$SUPPORT_FILE")"
+  if [ -d "$CANDIDATE/frontend" ] && [ -d "$CANDIDATE/backend" ]; then
+    REPO_ROOT="$CANDIDATE"
+  fi
+fi
+if [ -z "$REPO_ROOT" ] && [ -d "$REPO_FROM_BUNDLE/frontend" ] && [ -d "$REPO_FROM_BUNDLE/backend" ]; then
+  REPO_ROOT="$REPO_FROM_BUNDLE"
+fi
+
+echo "$(date '+%Y-%m-%d %H:%M:%S')  repo=$REPO_ROOT" >> "$LOG"
+
+if [ -z "$REPO_ROOT" ]; then
+  osascript -e 'display dialog "Orion could not find the project folder. Run:\n\nbash scripts/install-desktop-app.sh" buttons {"OK"} default button 1 with title "Orion"' >> "$LOG" 2>&1 || true
+  exit 1
+fi
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
+cd "$REPO_ROOT"
+
+# shellcheck disable=SC1091
+source "$REPO_ROOT/scripts/macos_python_env.sh"
+
+VENV="${REPO_ROOT}/.venv"
+if [ ! -x "$VENV/bin/python" ]; then
+  osascript -e 'display dialog "Orion is not installed yet. In Terminal run:\n\nbash scripts/install-mac.sh" buttons {"OK"} default button 1 with title "Orion"' >> "$LOG" 2>&1 || true
+  exit 1
+fi
+
+if ! "$VENV/bin/python" -c "import webview" >> "$LOG" 2>&1; then
+  echo "$(date '+%Y-%m-%d %H:%M:%S')  installing pywebview" >> "$LOG"
+  "$VENV/bin/python" -m pip install -q -r "$REPO_ROOT/desktop/requirements.txt" >> "$LOG" 2>&1
+fi
+
+echo "$(date '+%Y-%m-%d %H:%M:%S')  starting desktop/app.py" >> "$LOG"
+exec "$VENV/bin/python" "$REPO_ROOT/desktop/app.py" >> "$LOG" 2>&1

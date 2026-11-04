@@ -1,0 +1,13 @@
+[
+  {"rate": "500", "days": "26", "extra": "0", "deduction": "200", "amount": "12800.00"},
+  {"rate": "596.7742", "days": "31", "extra": "0", "deduction": "0", "amount": "18500.00"},
+  {"rate": "387.0968", "days": "5", "extra": "0", "deduction": "0", "amount": "1935.48"},
+  {"rate": "450", "days": "12.5", "extra": "100", "deduction": "50.25", "amount": "5674.75"},
+  {"rate": "0.005", "days": "1", "extra": "0", "deduction": "0", "amount": "0.01"},
+  {"rate": "0.004", "days": "1", "extra": "0", "deduction": "0", "amount": "0.00"},
+  {"rate": "500", "days": "1", "extra": "0", "deduction": "900", "amount": "0.00"},
+  {"rate": "", "days": "", "extra": "", "deduction": "", "amount": "0.00"},
+  {"rate": "1000000", "days": "31", "extra": "9999999.99", "deduction": "0", "amount": "40999999.99"},
+  {"rate": "333.3333", "days": "3", "extra": "0", "deduction": "0", "amount": "1000.00"},
+  {"rate": "620", "days": "28.5", "extra": "100", "deduction": "0", "amount": "17770.00"}
+]

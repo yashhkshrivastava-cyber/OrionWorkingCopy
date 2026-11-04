@@ -1,0 +1,46 @@
+import { useId } from 'react'
+
+/** Shield-and-star mark for Prakash Securities. */
+export function BrandMark({
+  size = 32,
+  className = '',
+}: {
+  size?: number
+  className?: string
+}) {
+  const id = useId().replace(/:/g, '')
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      className={className}
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id={`${id}-fill`} x1="8" y1="2" x2="24" y2="30" gradientUnits="userSpaceOnUse">
+          {/* The mark takes the theme's accent: its colours are variables, with the original teal and navy as the fallback. */}
+          <stop style={{ stopColor: 'var(--orion-mark-from, #0f766e)' }} />
+          <stop offset="0.55" style={{ stopColor: 'var(--orion-mark-mid, #155e75)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--orion-mark-to, #1e3a8a)' }} />
+        </linearGradient>
+      </defs>
+      <path
+        fill={`url(#${id}-fill)`}
+        d="M16 2.4 27 7.6v8.8c0 6.7-4.4 12.3-11 14.4C9.4 28.7 5 23.1 5 16.4V7.6L16 2.4Z"
+      />
+      <path
+        fill="none"
+        stroke="#fff"
+        strokeOpacity="0.28"
+        strokeWidth="1.15"
+        d="M16 4.5 25 8.7v7.6c0 5.6-3.7 10.3-9 12.1-5.3-1.8-9-6.5-9-12.1V8.7L16 4.5Z"
+      />
+      <path
+        fill="#fff"
+        d="M16 10.1 17.5 14.4H22.1L18.4 17.1 19.9 21.4 16 18.7 12.1 21.4 13.6 17.1 9.9 14.4H14.5Z"
+      />
+    </svg>
+  )
+}

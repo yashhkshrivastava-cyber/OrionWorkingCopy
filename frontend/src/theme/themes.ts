@@ -1,0 +1,457 @@
+/**
+ * The themes and the visual styles. This file is data only: to add a theme, add one object to THEMES. Nothing else
+ * needs to change; the engine, the settings screen and the previews all read this list.
+ *
+ * A theme describes itself with a handful of seed colours per mode. The engine derives the rest (borders, hover
+ * states, tints, readable text on the accent, status colours) and checks contrast, so a new theme cannot ship with
+ * unreadable text by accident. Only the Default theme writes its values out in full (`exact`), because it has to
+ * stay identical to the interface as it was before themes existed.
+ */
+
+import { STEPS } from './color'
+import type { AccentTokens, Palette, StyleDef, StyleId, ThemeDef } from './types'
+
+// ------------------------------------------------------------------------------------------------ the Default theme
+
+const BRAND = ['#effbf9', '#d5f5f0', '#aeeae2', '#78d8ce', '#40bfb5', '#1fa39b', '#14837f', '#136967', '#145453', '#134646', '#06292b']
+const ALT = ['#eff4ff', '#dbe6fe', '#bfd3fe', '#93b4fd', '#608cfa', '#3b68f5', '#2649ea', '#1e38d6', '#1f31ad', '#1f2f88', '#171f53']
+const asRamp = (list: string[]) => Object.fromEntries(STEPS.map((step, i) => [step, list[i]])) as Record<number, string>
+
+const DEFAULT_LIGHT: Palette = {
+  bg: '#f3f5f9',
+  bgElevated: '#ffffff',
+  surface: '#ffffff',
+  surfaceHover: '#f7f9fc',
+  muted: '#eef1f6',
+  border: '#e2e7ef',
+  borderStrong: '#c9d1de',
+  text: '#0e1726',
+  textMuted: '#4d5b73',
+  textFaint: '#606c7e',
+  rail: '#0c1626',
+  railRaised: '#142238',
+  railBorder: '#1d2d47',
+  railText: '#c5cfdf',
+  railTextFaint: '#7486a3',
+  railStrong: '#ffffff',
+  railHover: 'rgb(255 255 255 / 0.06)',
+  railActive: 'rgb(255 255 255 / 0.1)',
+  chartTick: '#6a778c',
+  chartGrid: '#e9edf3',
+  chartCursor: 'rgba(100, 116, 139, 0.1)',
+  positive: '#0a7a52',
+  positiveDim: '#e3f7ee',
+  negative: '#c42348',
+  negativeDim: '#fdecef',
+  warning: '#9a5a02',
+  warningDim: '#fdf3df',
+  amber: '#c27a06',
+  rose: '#dc2f55',
+  emerald: '#0b8a5c',
+}
+
+const DEFAULT_DARK: Palette = {
+  bg: '#0a101b',
+  bgElevated: '#0f1726',
+  surface: '#111a2a',
+  surfaceHover: '#172236',
+  muted: '#182235',
+  border: '#212d43',
+  borderStrong: '#33425c',
+  text: '#e7edf6',
+  textMuted: '#9ba8be',
+  textFaint: '#7a8ba3',
+  rail: '#070c15',
+  railRaised: '#111c2e',
+  railBorder: '#17233a',
+  railText: '#b9c4d6',
+  railTextFaint: '#6d7c94',
+  railStrong: '#ffffff',
+  railHover: 'rgb(255 255 255 / 0.06)',
+  railActive: 'rgb(255 255 255 / 0.1)',
+  chartTick: '#8e9cb3',
+  chartGrid: '#1f2b40',
+  chartCursor: 'rgba(148, 163, 184, 0.12)',
+  positive: '#3fd39b',
+  positiveDim: '#0a2c22',
+  negative: '#fb7691',
+  negativeDim: '#3a1220',
+  warning: '#f5b83d',
+  warningDim: '#35270a',
+  amber: '#f5b83d',
+  rose: '#fb7691',
+  emerald: '#3fd39b',
+}
+
+const DEFAULT_ACCENT_LIGHT: AccentTokens = {
+  ramp: asRamp(BRAND),
+  secondaryRamp: asRamp(ALT),
+  primary: '#136967',
+  primaryHover: '#145453',
+  onPrimary: '#ffffff',
+  accent: '#136967',
+  accentDim: '#d5f5f0',
+  secondary: '#2649ea',
+  secondaryDim: '#dbe6fe',
+  gradientFrom: '#1fa39b',
+  gradientTo: '#3b68f5',
+}
+
+const DEFAULT_ACCENT_DARK: AccentTokens = {
+  ramp: asRamp(BRAND),
+  secondaryRamp: asRamp(ALT),
+  primary: '#1fa39b',
+  primaryHover: '#40bfb5',
+  onPrimary: '#020617',
+  accent: '#4fcfc4',
+  accentDim: '#0c3a3b',
+  secondary: '#7fa0fb',
+  secondaryDim: '#1a2a5e',
+  gradientFrom: '#1fa39b',
+  gradientTo: '#3b68f5',
+}
+
+// ------------------------------------------------------------------------------------------------------- the themes
+
+export const DEFAULT_THEME_ID = 'default'
+
+export const THEMES: ThemeDef[] = [
+  {
+    id: 'default',
+    name: 'Default',
+    tagline: 'Clear. Familiar. Dependable.',
+    description: 'The Orion look you know: crisp surfaces, a teal accent and a deep navy rail.',
+    preferredMode: null,
+    style: 'professional',
+    accent: { light: '#14837f', dark: '#1fa39b' },
+    accent2: { light: '#3b68f5', dark: '#3b68f5' },
+    secondary: { light: '#2649ea', dark: '#7fa0fb' },
+    palette: {
+      light: { bg: DEFAULT_LIGHT.bg, surface: DEFAULT_LIGHT.surface, text: DEFAULT_LIGHT.text, rail: DEFAULT_LIGHT.rail },
+      dark: { bg: DEFAULT_DARK.bg, surface: DEFAULT_DARK.surface, text: DEFAULT_DARK.text, rail: DEFAULT_DARK.rail },
+    },
+    fonts: { sans: '"Inter", system-ui, sans-serif', display: '"Plus Jakarta Sans", "Inter", system-ui, sans-serif', displayWeight: 700, displayTracking: '-0.015em' },
+    motion: 'smooth',
+    exact: {
+      palette: { light: DEFAULT_LIGHT, dark: DEFAULT_DARK },
+      accent: { light: DEFAULT_ACCENT_LIGHT, dark: DEFAULT_ACCENT_DARK },
+    },
+  },
+  {
+    id: 'midnight',
+    name: 'Midnight',
+    tagline: 'Focused. Sophisticated. Immersive.',
+    description: 'Deep ink-blue surfaces lit by a single champagne-gold accent, with a faint cinematic glow.',
+    preferredMode: 'dark',
+    style: 'cinematic',
+    radius: 0.55,
+    accent: { light: '#a9761a', dark: '#e3b866' },
+    accent2: { light: '#c2622e', dark: '#d98a4e' },
+    secondary: { light: '#3b52c4', dark: '#8aa4ff' },
+    palette: {
+      dark: { bg: '#070b14', surface: '#0d1424', text: '#e9eef8', rail: '#04070d' },
+      light: { bg: '#eef1f7', surface: '#ffffff', text: '#0b1224', rail: '#0a1020' },
+    },
+    fonts: {
+      sans: '"Inter", system-ui, sans-serif',
+      display: '"Sora", "Inter", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&display=swap',
+      displayWeight: 600,
+      displayTracking: '-0.02em',
+    },
+    motion: 'smooth',
+  },
+  {
+    id: 'aurora',
+    name: 'Aurora',
+    tagline: 'Colourful. Energetic. Modern.',
+    description: 'An indigo night with violet, blue and teal light drifting through frosted glass surfaces.',
+    preferredMode: 'dark',
+    style: 'glass',
+    radius: 0.65,
+    accent: { light: '#5b5ff0', dark: '#7b82ff' },
+    accent2: { light: '#0fb5a6', dark: '#2dd4bf' },
+    secondary: { light: '#2b8bd6', dark: '#5eb8ff' },
+    palette: {
+      dark: { bg: '#090b1a', surface: '#11142b', text: '#eceefb', rail: '#060817' },
+      light: { bg: '#f1f2ff', surface: '#ffffff', text: '#12143a', rail: '#14163f' },
+    },
+    fonts: {
+      sans: '"Inter", system-ui, sans-serif',
+      display: '"Manrope", "Inter", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap',
+      displayWeight: 700,
+      displayTracking: '-0.02em',
+    },
+    motion: 'smooth',
+  },
+  {
+    id: 'obsidian',
+    name: 'Obsidian',
+    tagline: 'Quiet. Precise. Expensive.',
+    description: 'Almost-black surfaces, hairline borders and one platinum accent. Everything is about hierarchy.',
+    preferredMode: 'dark',
+    style: 'minimal',
+    radius: 0.3,
+    accent: { light: '#18181b', dark: '#ececee' },
+    accent2: { light: '#52525b', dark: '#9a9aa4' },
+    secondary: { light: '#52525b', dark: '#a1a1aa' },
+    palette: {
+      dark: { bg: '#0a0a0b', surface: '#111113', text: '#ededee', rail: '#070708', borderWeight: 0.62 },
+      light: { bg: '#f6f6f7', surface: '#ffffff', text: '#0b0b0c', rail: '#0b0b0c', borderWeight: 0.85 },
+    },
+    fonts: {
+      sans: '"Geist", "Inter", system-ui, sans-serif',
+      display: '"Geist", "Inter", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap',
+      displayWeight: 600,
+      displayTracking: '-0.03em',
+    },
+    motion: 'crisp',
+  },
+  {
+    id: 'ivory',
+    name: 'Ivory',
+    tagline: 'Calm. Warm. Readable.',
+    description: 'Warm paper, soft shadows and an ink-blue accent, set in a serif that reads like a printed page.',
+    preferredMode: 'light',
+    style: 'soft',
+    radius: 0.72,
+    accent: { light: '#34447a', dark: '#d2ad72' },
+    accent2: { light: '#a8742f', dark: '#b9824a' },
+    secondary: { light: '#8a5a2b', dark: '#8fa3d8' },
+    palette: {
+      light: { bg: '#f6f1e7', surface: '#fffdf8', text: '#2b2218', rail: '#ece3d2' },
+      dark: { bg: '#16120e', surface: '#1e1913', text: '#f0e8da', rail: '#0f0c09' },
+    },
+    fonts: {
+      sans: '"Inter", system-ui, sans-serif',
+      display: '"Newsreader", Georgia, serif',
+      link: 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap',
+      displayWeight: 600,
+      displayTracking: '-0.01em',
+    },
+    motion: 'smooth',
+  },
+  {
+    id: 'flux',
+    name: 'Flux',
+    tagline: 'Bold. Electric. Futuristic.',
+    description: 'A black canvas with a single acid-lime accent that glows. Loud where it matters, calm elsewhere.',
+    preferredMode: 'dark',
+    style: 'bold',
+    radius: 0.35,
+    accent: { light: '#7bbf00', dark: '#c6ff3d' },
+    accent2: { light: '#6d3df0', dark: '#8b5cff' },
+    secondary: { light: '#2f6fe0', dark: '#6aa8ff' },
+    palette: {
+      dark: { bg: '#06060c', surface: '#0d0d17', text: '#eef0f6', rail: '#04040a' },
+      light: { bg: '#f4f6ee', surface: '#ffffff', text: '#0e1108', rail: '#0b0d06' },
+    },
+    fonts: {
+      sans: '"Inter", system-ui, sans-serif',
+      display: '"Space Grotesk", "Inter", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap',
+      displayWeight: 700,
+      displayTracking: '-0.02em',
+    },
+    motion: 'crisp',
+  },
+  {
+    id: 'lumen',
+    experience: 'lumen',
+    name: 'Lumen Violet',
+    tagline: 'Bright. Friendly. Alive.',
+    description: 'A light, airy workspace: lavender paper, floating cards, a violet and pink glow and a typeface with personality.',
+    preferredMode: 'light',
+    style: 'lumen',
+    accent: { light: '#6a46f5', dark: '#9d86ff' },
+    accent2: { light: '#f0509a', dark: '#ff7ab6' },
+    secondary: { light: '#0f8fd1', dark: '#5cc0ff' },
+    palette: {
+      light: { bg: '#f5f3fc', surface: '#ffffff', text: '#1a1640', rail: '#1a1640', borderWeight: 0.8 },
+      dark: { bg: '#0d0b1e', surface: '#171431', text: '#f1efff', rail: '#09081a', borderWeight: 0.8 },
+    },
+    fonts: {
+      sans: '"Manrope", "Inter", system-ui, sans-serif',
+      display: '"Bricolage Grotesque", "Manrope", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Manrope:wght@400;500;600;700;800&display=swap',
+      displayWeight: 650,
+      displayTracking: '-0.025em',
+    },
+    motion: 'smooth',
+  },
+  {
+    id: 'lumen-ocean',
+    experience: 'lumen',
+    name: 'Lumen Ocean',
+    tagline: 'Fresh. Clear. Calm.',
+    description: 'Sea-glass blues and a bright aqua glow on cool white, for a workspace that feels like open water.',
+    preferredMode: 'light',
+    style: 'lumen',
+    accent: { light: '#0a78c8', dark: '#4eb4ff' },
+    accent2: { light: '#10b8a6', dark: '#34d9c3' },
+    secondary: { light: '#6a46f5', dark: '#a493ff' },
+    palette: {
+      light: { bg: '#f0f7fb', surface: '#ffffff', text: '#0e2236', rail: '#0e2236', borderWeight: 0.8 },
+      dark: { bg: '#07131d', surface: '#0e1e2c', text: '#e8f3fb', rail: '#050e16', borderWeight: 0.8 },
+    },
+    fonts: {
+      sans: '"Manrope", "Inter", system-ui, sans-serif',
+      display: '"Bricolage Grotesque", "Manrope", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Manrope:wght@400;500;600;700;800&display=swap',
+      displayWeight: 650,
+      displayTracking: '-0.025em',
+    },
+    motion: 'smooth',
+  },
+  {
+    id: 'lumen-sunrise',
+    experience: 'lumen',
+    name: 'Lumen Sunrise',
+    tagline: 'Warm. Optimistic. Human.',
+    description: 'Peach paper with a coral and amber glow: a warm start to the day.',
+    preferredMode: 'light',
+    style: 'lumen',
+    accent: { light: '#d84a22', dark: '#ff8660' },
+    accent2: { light: '#f2a007', dark: '#ffc247' },
+    secondary: { light: '#2a6fd6', dark: '#7aa9ff' },
+    palette: {
+      light: { bg: '#fbf5ef', surface: '#ffffff', text: '#2a1710', rail: '#2a1710', borderWeight: 0.8 },
+      dark: { bg: '#170e0a', surface: '#22150f', text: '#fbeee6', rail: '#100906', borderWeight: 0.8 },
+    },
+    fonts: {
+      sans: '"Manrope", "Inter", system-ui, sans-serif',
+      display: '"Bricolage Grotesque", "Manrope", system-ui, sans-serif',
+      link: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Manrope:wght@400;500;600;700;800&display=swap',
+      displayWeight: 650,
+      displayTracking: '-0.025em',
+    },
+    motion: 'smooth',
+  },
+]
+
+export const themeById = (id: string): ThemeDef => THEMES.find((theme) => theme.id === id) ?? THEMES[0]
+
+/** The theme a person lands on when they first choose the Lumen interface. */
+export const LUMEN_THEME_ID = 'lumen'
+
+/** The themes of one interface: classic themes for the classic look, the Lumen palettes for Lumen. */
+export const themesFor = (experience: 'classic' | 'lumen'): ThemeDef[] => THEMES.filter((theme) => (theme.experience ?? 'classic') === experience)
+
+// -------------------------------------------------------------------------------------------------------- the styles
+
+export const STYLES: StyleDef[] = [
+  {
+    id: 'professional',
+    name: 'Professional',
+    description: 'Crisp surfaces, light shadows. Built for long working days.',
+    radius: 0.5,
+    surfaceAlpha: { light: 1, dark: 1 },
+    blur: 0,
+    shadow: 'standard',
+    glow: 0,
+    gradient: false,
+    ambient: false,
+    ambientStrength: 1,
+    borderWeight: 1,
+  },
+  {
+    id: 'minimal',
+    name: 'Minimal',
+    description: 'Flat and quiet. Hairlines instead of shadows.',
+    radius: 0.3,
+    surfaceAlpha: { light: 1, dark: 1 },
+    blur: 0,
+    shadow: 'none',
+    glow: 0,
+    gradient: false,
+    ambient: false,
+    ambientStrength: 1,
+    borderWeight: 1,
+  },
+  {
+    id: 'soft',
+    name: 'Soft',
+    description: 'Generous curves and gentle, diffuse shadows.',
+    radius: 0.78,
+    surfaceAlpha: { light: 1, dark: 1 },
+    blur: 0,
+    shadow: 'soft',
+    glow: 0,
+    gradient: false,
+    ambient: true,
+    ambientStrength: 1,
+    borderWeight: 0.8,
+  },
+  {
+    id: 'glass',
+    name: 'Glass',
+    description: 'Frosted, translucent surfaces over a soft wash of colour.',
+    radius: 0.65,
+    surfaceAlpha: { light: 0.72, dark: 0.58 },
+    blur: 16,
+    shadow: 'soft',
+    glow: 0.15,
+    gradient: true,
+    ambient: true,
+    ambientStrength: 1.7,
+    borderWeight: 1,
+  },
+  {
+    id: 'bold',
+    name: 'Bold',
+    description: 'Strong lines, saturated accents and a confident glow.',
+    radius: 0.35,
+    surfaceAlpha: { light: 1, dark: 1 },
+    blur: 0,
+    shadow: 'hard',
+    glow: 0.4,
+    gradient: true,
+    ambient: false,
+    ambientStrength: 1,
+    borderWeight: 1.5,
+  },
+  {
+    id: 'cinematic',
+    name: 'Cinematic',
+    description: 'Deep shadows, a hint of glass and light that falls across the page.',
+    radius: 0.55,
+    surfaceAlpha: { light: 0.9, dark: 0.82 },
+    blur: 10,
+    shadow: 'dramatic',
+    glow: 0.35,
+    gradient: true,
+    ambient: true,
+    ambientStrength: 1.35,
+    borderWeight: 1,
+  },
+  {
+    id: 'lumen',
+    name: 'Lumen',
+    description: 'Very round, floating cards with frosted light, a glow of colour behind and gradient highlights.',
+    radius: 0.92,
+    surfaceAlpha: { light: 0.82, dark: 0.7 },
+    blur: 18,
+    shadow: 'soft',
+    glow: 0.25,
+    gradient: true,
+    ambient: true,
+    ambientStrength: 1.9,
+    borderWeight: 0.8,
+  },
+]
+
+export const styleById = (id: StyleId | string | null | undefined): StyleDef => STYLES.find((style) => style.id === id) ?? STYLES[0]
+
+/** The accent swatches offered in the customiser. Each is a good primary on both light and dark surfaces. */
+export const ACCENT_SWATCHES: { name: string; color: string }[] = [
+  { name: 'Teal', color: '#14b8a6' },
+  { name: 'Azure', color: '#3b82f6' },
+  { name: 'Indigo', color: '#6366f1' },
+  { name: 'Violet', color: '#8b5cf6' },
+  { name: 'Rose', color: '#f43f5e' },
+  { name: 'Amber', color: '#f59e0b' },
+  { name: 'Emerald', color: '#10b981' },
+  { name: 'Graphite', color: '#71717a' },
+]

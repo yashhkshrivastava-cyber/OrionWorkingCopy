@@ -1,0 +1,1233 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * The design system.
+ *
+ * Everything visual is a token here, and every token is a CSS variable that the theme engine (src/theme) rewrites at
+ * runtime. The values below are the Default theme: they are what the page shows before any script has run, and what
+ * every other theme replaces. Components never use a colour, radius, shadow or duration of their own; they use the
+ * Tailwind names below (bg-surface, text-accent, rounded-lg, shadow-raised ...) or the classes in "Components".
+ *
+ *   1. Tokens          :root / .dark       the Default theme, as variables
+ *   2. Tailwind map    @theme              variables -> utility class names
+ *   3. Base            @layer base         type, focus, selection, scrollbars
+ *   4. Components      @layer utilities    panel, buttons, type scale, ambient canvas
+ *   5. Motion          animations, theme switching, reduced motion
+ *
+ * Two hues carry the product: `brand` (the accent: teal in Default) for actions and the Orion side of the business,
+ * and `alt` (ink blue in Default) for the Tally side and secondary emphasis. Amber, rose and emerald are reserved for
+ * warning, danger and success.
+ */
+
+/* ------------------------------------------------------------------------------------------------ 1. Tokens */
+
+:root {
+  /* Surfaces and text */
+  --orion-bg: #f3f5f9;
+  --orion-bg-elevated: #ffffff;
+  --orion-surface: #ffffff;
+  --orion-surface-hover: #f7f9fc;
+  --orion-muted: #eef1f6;
+  --orion-border: #e2e7ef;
+  --orion-border-strong: #c9d1de;
+  --orion-text: #0e1726;
+  --orion-text-muted: #4d5b73;
+  --orion-text-faint: #606c7e;
+
+  /* The accent, its tints, and the secondary hue */
+  --orion-accent: #136967;
+  --orion-accent-dim: #d5f5f0;
+  --orion-violet: #2649ea;
+  --orion-violet-dim: #dbe6fe;
+  --orion-primary: #136967;
+  --orion-primary-hover: #145453;
+  --orion-on-primary: #ffffff;
+  --orion-primary-fill: linear-gradient(#136967, #136967);
+  --orion-primary-fill-hover: linear-gradient(#145453, #145453);
+  --orion-highlight-fill: linear-gradient(#136967, #136967);
+  --orion-ring: rgb(19 105 103 / 0.4);
+  --orion-ring-width: 2px;
+  --orion-selection: #aeeae2;
+  --orion-on-selection: #0e1726;
+
+  --orion-brand-50: #effbf9;
+  --orion-brand-100: #d5f5f0;
+  --orion-brand-200: #aeeae2;
+  --orion-brand-300: #78d8ce;
+  --orion-brand-400: #40bfb5;
+  --orion-brand-500: #1fa39b;
+  --orion-brand-600: #14837f;
+  --orion-brand-700: #136967;
+  --orion-brand-800: #145453;
+  --orion-brand-900: #134646;
+  --orion-brand-950: #06292b;
+  --orion-alt-50: #eff4ff;
+  --orion-alt-100: #dbe6fe;
+  --orion-alt-200: #bfd3fe;
+  --orion-alt-300: #93b4fd;
+  --orion-alt-400: #608cfa;
+  --orion-alt-500: #3b68f5;
+  --orion-alt-600: #2649ea;
+  --orion-alt-700: #1e38d6;
+  --orion-alt-800: #1f31ad;
+  --orion-alt-900: #1f2f88;
+  --orion-alt-950: #171f53;
+
+  /* Status */
+  --orion-amber: #c27a06;
+  --orion-rose: #dc2f55;
+  --orion-emerald: #0b8a5c;
+  --orion-positive: #0a7a52;
+  --orion-positive-dim: #e3f7ee;
+  --orion-negative: #c42348;
+  --orion-negative-dim: #fdecef;
+  --orion-warning: #9a5a02;
+  --orion-warning-dim: #fdf3df;
+  --orion-on-negative: #ffffff;
+  --orion-scrim: rgb(25 25 26 / 0.52);
+
+  /* Charts */
+  --orion-chart-tick: #6a778c;
+  --orion-chart-grid: #e9edf3;
+  --orion-chart-cursor: rgba(100, 116, 139, 0.1);
+  /* Data series. Mid-tones that read on light and dark surfaces; only the first follows the accent. */
+  --orion-s-primary: #16a79d;
+  --orion-s-info: #4f7bf7;
+  --orion-s-warn: #f2a531;
+  --orion-s-neg: #ee5b76;
+  --orion-s-violet: #8a7cf0;
+  --orion-s-pos: #22b07d;
+  --orion-s-neutral: #9aa6b8;
+  --orion-s-sky: #38b6e8;
+  --orion-s-orange: #f08a4b;
+  --orion-s-lilac: #b28cf2;
+  --orion-s-pink: #d8619f;
+  --orion-s-lime: #7cc254;
+  --orion-s-unpaid: #e2445c;
+
+  /* The navigation rail frames the workspace. */
+  --orion-rail: #0c1626;
+  --orion-rail-raised: #142238;
+  --orion-rail-border: #1d2d47;
+  --orion-rail-text: #c5cfdf;
+  --orion-rail-text-faint: #7486a3;
+  --orion-rail-strong: #ffffff;
+  --orion-rail-hover: rgb(255 255 255 / 0.06);
+  --orion-rail-active: rgb(255 255 255 / 0.1);
+  --orion-rail-accent: #78d8ce;
+  --orion-mark-from: #0f766e;
+  --orion-mark-mid: #155e75;
+  --orion-mark-to: #1e3a8a;
+  --orion-ink: #0b1220;
+
+  /* Surface treatment */
+  --orion-radius-scale: 1;
+  --orion-surface-fill: var(--orion-surface);
+  --orion-backdrop: none;
+  --orion-shadow-card: 0 1px 2px rgb(14 23 38 / 0.04), 0 1px 1px rgb(14 23 38 / 0.03);
+  --orion-shadow-raised: 0 10px 24px -12px rgb(14 23 38 / 0.18), 0 2px 6px -2px rgb(14 23 38 / 0.06);
+  --orion-shadow-overlay: 0 24px 48px -16px rgb(14 23 38 / 0.28), 0 4px 12px -4px rgb(14 23 38 / 0.1);
+  --orion-glow: 0 0 #0000;
+  --orion-ambient: none;
+
+  /* Type and size */
+  --orion-ui-scale: 100;
+  --orion-font-sans: "Inter", system-ui, sans-serif;
+  --orion-font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --orion-display-weight: 700;
+  --orion-display-tracking: -0.015em;
+
+  /* Motion */
+  --orion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --orion-dur-fast: 140ms;
+  --orion-dur-base: 220ms;
+  --orion-dur-slow: 380ms;
+}
+
+.dark {
+  --orion-bg: #0a101b;
+  --orion-bg-elevated: #0f1726;
+  --orion-surface: #111a2a;
+  --orion-surface-hover: #172236;
+  --orion-muted: #182235;
+  --orion-border: #212d43;
+  --orion-border-strong: #33425c;
+  --orion-text: #e7edf6;
+  --orion-text-muted: #9ba8be;
+  --orion-text-faint: #7a8ba3;
+
+  --orion-accent: #4fcfc4;
+  --orion-accent-dim: #0c3a3b;
+  --orion-violet: #7fa0fb;
+  --orion-violet-dim: #1a2a5e;
+  --orion-primary: #1fa39b;
+  --orion-primary-hover: #40bfb5;
+  --orion-on-primary: #020617;
+  --orion-primary-fill: linear-gradient(#1fa39b, #1fa39b);
+  --orion-primary-fill-hover: linear-gradient(#40bfb5, #40bfb5);
+  --orion-highlight-fill: linear-gradient(#4fcfc4, #4fcfc4);
+  --orion-ring: rgb(79 207 196 / 0.5);
+  --orion-selection: #145453;
+  --orion-on-selection: #effbf9;
+
+  --orion-amber: #f5b83d;
+  --orion-rose: #fb7691;
+  --orion-emerald: #3fd39b;
+  --orion-positive: #3fd39b;
+  --orion-positive-dim: #0a2c22;
+  --orion-negative: #fb7691;
+  --orion-negative-dim: #3a1220;
+  --orion-warning: #f5b83d;
+  --orion-warning-dim: #35270a;
+  --orion-on-negative: #0b1220;
+  --orion-scrim: rgb(0 0 1 / 0.68);
+
+  --orion-chart-tick: #8e9cb3;
+  --orion-chart-grid: #1f2b40;
+  --orion-chart-cursor: rgba(148, 163, 184, 0.12);
+
+  --orion-rail: #070c15;
+  --orion-rail-raised: #111c2e;
+  --orion-rail-border: #17233a;
+  --orion-rail-text: #b9c4d6;
+  --orion-rail-text-faint: #6d7c94;
+
+  --orion-shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --orion-shadow-raised: 0 12px 28px -14px rgb(0 0 0 / 0.7), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --orion-shadow-overlay: 0 28px 56px -18px rgb(0 0 0 / 0.8), 0 6px 14px -6px rgb(0 0 0 / 0.5);
+}
+
+/* ------------------------------------------------------------------------------------------- 2. Tailwind map */
+
+@theme {
+  --font-sans: var(--orion-font-sans);
+  --font-display: var(--orion-font-display);
+
+  --color-brand-50: var(--orion-brand-50);
+  --color-brand-100: var(--orion-brand-100);
+  --color-brand-200: var(--orion-brand-200);
+  --color-brand-300: var(--orion-brand-300);
+  --color-brand-400: var(--orion-brand-400);
+  --color-brand-500: var(--orion-brand-500);
+  --color-brand-600: var(--orion-brand-600);
+  --color-brand-700: var(--orion-brand-700);
+  --color-brand-800: var(--orion-brand-800);
+  --color-brand-900: var(--orion-brand-900);
+  --color-brand-950: var(--orion-brand-950);
+
+  --color-alt-50: var(--orion-alt-50);
+  --color-alt-100: var(--orion-alt-100);
+  --color-alt-200: var(--orion-alt-200);
+  --color-alt-300: var(--orion-alt-300);
+  --color-alt-400: var(--orion-alt-400);
+  --color-alt-500: var(--orion-alt-500);
+  --color-alt-600: var(--orion-alt-600);
+  --color-alt-700: var(--orion-alt-700);
+  --color-alt-800: var(--orion-alt-800);
+  --color-alt-900: var(--orion-alt-900);
+  --color-alt-950: var(--orion-alt-950);
+
+  --color-bg: var(--orion-bg);
+  --color-bg-elevated: var(--orion-bg-elevated);
+  --color-surface: var(--orion-surface);
+  --color-surface-hover: var(--orion-surface-hover);
+  --color-muted: var(--orion-muted);
+  --color-border: var(--orion-border);
+  --color-border-strong: var(--orion-border-strong);
+
+  --color-accent: var(--orion-accent);
+  --color-accent-dim: var(--orion-accent-dim);
+  --color-primary: var(--orion-primary);
+  --color-primary-hover: var(--orion-primary-hover);
+  --color-on-primary: var(--orion-on-primary);
+  --color-violet: var(--orion-violet);
+  --color-violet-dim: var(--orion-violet-dim);
+  --color-amber: var(--orion-amber);
+  --color-rose: var(--orion-rose);
+  --color-emerald: var(--orion-emerald);
+
+  --color-positive: var(--orion-positive);
+  --color-positive-dim: var(--orion-positive-dim);
+  --color-negative: var(--orion-negative);
+  --color-negative-dim: var(--orion-negative-dim);
+  --color-warning: var(--orion-warning);
+  --color-warning-dim: var(--orion-warning-dim);
+  --color-on-negative: var(--orion-on-negative);
+  --color-scrim: var(--orion-scrim);
+
+  --color-text: var(--orion-text);
+  --color-text-muted: var(--orion-text-muted);
+  --color-text-faint: var(--orion-text-faint);
+
+  --color-chart-tick: var(--orion-chart-tick);
+  --color-chart-grid: var(--orion-chart-grid);
+  --color-chart-cursor: var(--orion-chart-cursor);
+
+  --color-rail: var(--orion-rail);
+  --color-rail-raised: var(--orion-rail-raised);
+  --color-rail-border: var(--orion-rail-border);
+  --color-rail-text: var(--orion-rail-text);
+  --color-rail-text-faint: var(--orion-rail-text-faint);
+  --color-rail-strong: var(--orion-rail-strong);
+  --color-rail-hover: var(--orion-rail-hover);
+  --color-rail-active: var(--orion-rail-active);
+  --color-rail-accent: var(--orion-rail-accent);
+  --color-ink: var(--orion-ink);
+
+  /* Corners follow the person's radius setting. Pills (rounded-full) are unaffected. */
+  --radius-xs: calc(0.125rem * var(--orion-radius-scale));
+  --radius-sm: calc(0.25rem * var(--orion-radius-scale));
+  --radius-md: calc(0.375rem * var(--orion-radius-scale));
+  --radius-lg: calc(0.5rem * var(--orion-radius-scale));
+  --radius-xl: calc(0.75rem * var(--orion-radius-scale));
+  --radius-2xl: calc(1rem * var(--orion-radius-scale));
+  --radius-3xl: calc(1.5rem * var(--orion-radius-scale));
+  --radius-4xl: calc(2rem * var(--orion-radius-scale));
+
+  --shadow-card: var(--orion-shadow-card);
+  --shadow-raised: var(--orion-shadow-raised);
+  --shadow-overlay: var(--orion-shadow-overlay);
+
+  --ease-orion: var(--orion-ease);
+}
+
+/* ---------------------------------------------------------------------------------------------------- 3. Base */
+
+@layer base {
+  * {
+    @apply border-[color:var(--color-border)];
+  }
+
+  html {
+    @apply antialiased;
+    color-scheme: light;
+    overflow-x: hidden;
+    /* The interface-size setting: everything is in rem, so this scales the whole product. */
+    font-size: calc(var(--orion-ui-scale, 100) * 1%);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply min-h-dvh overflow-x-hidden font-sans text-[color:var(--color-text)] bg-[color:var(--color-bg)];
+    font-feature-settings: "ss01" on, "cv11" on;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: var(--orion-display-tracking);
+  }
+
+  /* The printed bill keeps its own type: it is a document, not part of the app's chrome. */
+  .bill-sheet h1,
+  .bill-sheet h2,
+  .bill-sheet h3 {
+    font-family: inherit;
+    letter-spacing: normal;
+  }
+
+  ::selection {
+    background: var(--orion-selection);
+    color: var(--orion-on-selection);
+  }
+
+  /* Keyboard focus is always visible; form fields draw their own ring. */
+  a:focus-visible,
+  button:focus-visible,
+  [role='tab']:focus-visible,
+  [role='radio']:focus-visible,
+  [role='option']:focus-visible,
+  summary:focus-visible {
+    outline: var(--orion-ring-width) solid var(--orion-accent);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--orion-text-faint) 55%, transparent);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--orion-text-muted) 70%, transparent);
+    background-clip: padding-box;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply outline-none;
+  }
+
+  input[type='date'] {
+    color-scheme: inherit;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------- 4. Components */
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: var(--orion-display-tracking);
+  }
+
+  /*
+   * Type scale. Hierarchy comes from size, weight and spacing, not from extra colours or borders.
+   *   display   a page's hero line (the home page)
+   *   h1 h2 h3  page title, section title, card title
+   *   body      reading text and form values
+   *   small     secondary text, table cells
+   *   caption   hints, timestamps, helper text
+   *   label     field labels and button text
+   *   eyebrow   the small capitals above a group
+   */
+  .t-display {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.625rem);
+    line-height: 1.08;
+    font-weight: var(--orion-display-weight);
+    letter-spacing: calc(var(--orion-display-tracking) * 1.6);
+  }
+
+  .t-h1 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: var(--orion-display-weight);
+    letter-spacing: calc(var(--orion-display-tracking) * 1.2);
+  }
+
+  .t-h2 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.3;
+    font-weight: min(var(--orion-display-weight), 650);
+    letter-spacing: var(--orion-display-tracking);
+  }
+
+  .t-h3 {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: var(--orion-display-tracking);
+  }
+
+  .t-body {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .t-small {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .t-caption {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--orion-text-muted);
+  }
+
+  .t-label {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .t-num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Small capitals above a group of things: nav sections, card groups, table captions. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orion-text-faint);
+  }
+
+  /*
+   * The standard surface: every card, panel and table frame. The fill, the blur and the shadow come from the style
+   * (Glass is translucent over the ambient wash; Minimal has no shadow). A panel inside a panel is never blurred.
+   */
+  .panel {
+    border: 1px solid var(--orion-border);
+    border-radius: calc(0.875rem * var(--orion-radius-scale));
+    background: var(--orion-surface-fill);
+    box-shadow: var(--orion-shadow-card);
+    -webkit-backdrop-filter: var(--orion-backdrop);
+    backdrop-filter: var(--orion-backdrop);
+  }
+
+  .panel .panel {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--orion-surface);
+  }
+
+  /*
+   * A blurred panel (the Glass styles) is a layer of its own, so a menu that opens out of one is drawn inside that
+   * layer, and the panels that come after it on the page are drawn over the menu. While a panel has a menu open
+   * (anything arriving with .pop-in or leaving with .pop-out) the whole panel is lifted above its neighbours. It stays
+   * under dialogs, drawers and the floating buttons. The position is set with no weight, so a panel that is already
+   * sticky or absolute keeps that.
+   */
+  :where(.panel:has(.pop-in, .pop-out)) {
+    position: relative;
+  }
+
+  .panel:has(.pop-in, .pop-out) {
+    z-index: 20;
+  }
+
+  /* An overlay (dialog, drawer, menu): more opaque than a panel so text stays easy to read over anything. */
+  /* A pop-over you read (a hover card, a chart's tooltip): solid, so nothing behind it shows through the words, with a
+     firmer edge and shadow to lift it off whatever it covers. Menus and dialogs keep the lighter .overlay. */
+  .tip-surface {
+    background: var(--orion-surface);
+    border-color: var(--orion-border-strong);
+    box-shadow: var(--orion-shadow-overlay);
+  }
+
+  .overlay {
+    background: color-mix(in srgb, var(--orion-surface) 94%, transparent);
+    -webkit-backdrop-filter: var(--orion-backdrop);
+    backdrop-filter: var(--orion-backdrop);
+    box-shadow: var(--orion-shadow-overlay);
+  }
+
+  /* The primary action. Solid, or the theme's gradient; Bold and Cinematic styles add a glow. */
+  .btn-primary {
+    background-image: var(--orion-primary-fill);
+    color: var(--orion-on-primary);
+    border: 1px solid color-mix(in srgb, var(--orion-primary) 80%, black);
+    box-shadow: var(--orion-glow);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-image: var(--orion-primary-fill-hover);
+  }
+
+  /* A bar or mark of the accent that follows the style: a gradient where the style uses them. */
+  .accent-fill {
+    background-image: var(--orion-highlight-fill);
+  }
+
+  /* The workspace backdrop: the theme's ambient wash of colour, painted once and never repainted on scroll. */
+  .app-canvas {
+    background-color: var(--orion-bg);
+    background-image: var(--orion-ambient);
+    background-repeat: no-repeat;
+  }
+
+  /* Dotted backdrop at the top of the workspace, so empty space does not read as a void. */
+  .canvas-grid {
+    background-image: radial-gradient(color-mix(in srgb, var(--orion-text-faint) 26%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent 340px);
+    mask-image: linear-gradient(180deg, #000, transparent 340px);
+  }
+
+  .scroll-quiet {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scroll-quiet::-webkit-scrollbar {
+    display: none;
+  }
+
+  .interactive {
+    transition:
+      transform var(--orion-dur-fast) var(--orion-ease),
+      box-shadow var(--orion-dur-fast) var(--orion-ease),
+      background-color var(--orion-dur-fast) var(--orion-ease),
+      background-image var(--orion-dur-fast) var(--orion-ease),
+      border-color var(--orion-dur-fast) var(--orion-ease),
+      color var(--orion-dur-fast) var(--orion-ease),
+      opacity var(--orion-dur-fast) var(--orion-ease);
+  }
+
+  .interactive:active {
+    transform: scale(0.985);
+  }
+
+  .data-hot,
+  .intent-hot {
+    transition:
+      transform var(--orion-dur-base) var(--orion-ease),
+      box-shadow var(--orion-dur-base) var(--orion-ease),
+      border-color var(--orion-dur-base) var(--orion-ease),
+      background-color var(--orion-dur-base) var(--orion-ease);
+  }
+
+  .data-hot:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--orion-shadow-raised);
+  }
+
+  .data-hot:active {
+    transform: translateY(-1px);
+  }
+
+  .intent-hot:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--orion-shadow-raised);
+  }
+
+  .intent-hot:active {
+    transform: translateY(-1px);
+  }
+
+  .intent-hot .hot-icon,
+  .intent-hot .hot-cta {
+    transition: transform var(--orion-dur-base) var(--orion-ease);
+  }
+
+  .intent-hot:hover .hot-icon {
+    transform: scale(1.06);
+  }
+
+  .intent-hot:hover .hot-cta {
+    transform: translateX(3px);
+  }
+
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--orion-text) 9%, transparent), transparent);
+    animation: orion-shimmer 1.4s ease infinite;
+  }
+
+  /* A placeholder block while something loads: the same shape as what will be there. */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(0.5rem * var(--orion-radius-scale));
+    background: var(--orion-muted);
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--orion-text) 8%, transparent), transparent);
+    animation: orion-shimmer 1.5s ease infinite;
+  }
+
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 1rem;
+    animation: prakash-marquee 42s linear infinite;
+  }
+
+  .marquee-track.reverse {
+    animation-name: prakash-marquee-reverse;
+    animation-duration: 48s;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* -------------------------------------------------------------------------------------------------- 5. Motion */
+
+@layer utilities {
+  .page-enter {
+    animation: orion-enter var(--orion-dur-slow) var(--orion-ease) both;
+  }
+
+  .stagger-in > * {
+    animation: orion-enter var(--orion-dur-slow) var(--orion-ease) both;
+  }
+
+  .stagger-in > *:nth-child(1) { animation-delay: 0.03s; }
+  .stagger-in > *:nth-child(2) { animation-delay: 0.07s; }
+  .stagger-in > *:nth-child(3) { animation-delay: 0.11s; }
+  .stagger-in > *:nth-child(4) { animation-delay: 0.15s; }
+  .stagger-in > *:nth-child(5) { animation-delay: 0.19s; }
+  .stagger-in > *:nth-child(6) { animation-delay: 0.23s; }
+  .stagger-in > *:nth-child(7) { animation-delay: 0.27s; }
+  .stagger-in > *:nth-child(8) { animation-delay: 0.31s; }
+  .stagger-in > *:nth-child(9) { animation-delay: 0.35s; }
+  .stagger-in > *:nth-child(10) { animation-delay: 0.39s; }
+
+  /* A toast, a menu or a popover arriving, and leaving. */
+  .toast-in,
+  .pop-in {
+    animation: orion-pop var(--orion-dur-base) var(--orion-ease) both;
+    transform-origin: top right;
+  }
+
+  .pop-out {
+    animation: orion-pop-out var(--orion-dur-fast) ease both;
+    transform-origin: top right;
+  }
+
+  /* A dialog arriving and leaving. */
+  .modal-in {
+    animation: orion-modal var(--orion-dur-base) var(--orion-ease) both;
+  }
+
+  .modal-out {
+    animation: orion-modal-out var(--orion-dur-fast) ease both;
+  }
+
+  .drawer-in {
+    animation: orion-drawer var(--orion-dur-base) var(--orion-ease) both;
+  }
+
+  .drawer-left-out {
+    animation: orion-drawer-left-out var(--orion-dur-fast) ease both;
+  }
+
+  .drawer-right-in {
+    animation: orion-drawer-right var(--orion-dur-base) var(--orion-ease) both;
+  }
+
+  .drawer-right-out {
+    animation: orion-drawer-right-out var(--orion-dur-fast) ease both;
+  }
+
+  .backdrop-in {
+    animation: orion-fade var(--orion-dur-base) ease both;
+  }
+
+  .backdrop-out {
+    animation: orion-fade-out var(--orion-dur-fast) ease both;
+  }
+}
+
+@keyframes orion-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes orion-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes orion-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+@keyframes orion-modal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes orion-modal-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+  }
+}
+
+@keyframes orion-drawer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes orion-drawer-left-out {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes orion-drawer-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes orion-drawer-right-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes orion-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes orion-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* The slim bar on a filter bar while the figures are being recalculated. */
+@keyframes dock-slide {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(310%);
+  }
+}
+
+.dock-progress {
+  animation: dock-slide 1.1s var(--orion-ease) infinite;
+}
+
+@keyframes orion-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes prakash-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes prakash-marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/*
+ * Switching theme or mode dissolves the old look into the new one. With the View Transitions API the browser
+ * cross-fades two snapshots (cheap and smooth); without it, colours are eased for a moment.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.32s;
+  animation-timing-function: ease;
+}
+
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 0.3s ease,
+    background-image 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    fill 0.3s ease,
+    stroke 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+/* Less motion, whether the device asks for it or the person did in Appearance. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .marquee-track,
+  .shimmer::after,
+  .dock-progress,
+  .skeleton::after {
+    animation: none !important;
+  }
+
+  .interactive:active,
+  .data-hot:hover,
+  .data-hot:active,
+  .intent-hot:hover,
+  .intent-hot:active,
+  .intent-hot:hover .hot-icon,
+  .intent-hot:hover .hot-cta {
+    transform: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-motion='reduced'] .marquee-track,
+html[data-motion='reduced'] .shimmer::after,
+html[data-motion='reduced'] .dock-progress,
+html[data-motion='reduced'] .skeleton::after {
+  animation: none !important;
+}
+
+html[data-motion='reduced'] .interactive:active,
+html[data-motion='reduced'] .data-hot:hover,
+html[data-motion='reduced'] .intent-hot:hover {
+  transform: none;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--orion-chart-grid) !important;
+}
+
+.recharts-text {
+  fill: var(--orion-chart-tick) !important;
+  font-size: 11px !important;
+}
+
+/* Printing a bill: only the bill is printed, on A4, with the navy bands and tints kept. */
+.bill-print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body > *:not(.bill-print-root):not(.lh-print-root) {
+    display: none !important;
+  }
+
+  .bill-print-root {
+    display: block !important;
+  }
+
+  .bill-sheet {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/*
+ * Letterhead. A letter is typed on a sheet that looks like the printed page and is printed from the same HTML.
+ * Like the bill, the sheet is paper: fixed colours, never the app theme. Lengths come from the letterhead
+ * design (millimetres) and are set inline by LetterheadSheet.tsx.
+ */
+.lh-font-sans {
+  font-family: Arial, Helvetica, 'Nirmala UI', sans-serif;
+}
+
+.lh-font-serif {
+  font-family: 'Times New Roman', Times, 'Nirmala UI', serif;
+}
+
+.lh-body {
+  color: #111827;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  outline: none;
+}
+
+.lh-body p {
+  margin: 0 0 0.6em;
+  min-height: 1.45em;
+}
+
+.lh-body h2 {
+  margin: 0.3em 0 0.5em;
+  font-size: 1.35em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.lh-body h3 {
+  margin: 0.3em 0 0.4em;
+  font-size: 1.12em;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.lh-body ul,
+.lh-body ol {
+  margin: 0 0 0.6em;
+  padding-left: 1.7em;
+}
+
+.lh-body ul {
+  list-style: disc;
+}
+
+.lh-body ol {
+  list-style: decimal;
+}
+
+.lh-body li {
+  margin: 0.15em 0;
+}
+
+.lh-body table {
+  width: 100%;
+  margin: 0.6em 0;
+  border-collapse: collapse;
+}
+
+.lh-body td,
+.lh-body th {
+  padding: 3pt 5pt;
+  border: 0.75pt solid #4b5563;
+  text-align: left;
+  vertical-align: top;
+}
+
+.lh-body th {
+  background: #f3f4f6;
+  font-weight: 700;
+}
+
+.lh-body hr {
+  margin: 0.8em 0;
+  border: 0;
+  border-top: 0.75pt solid #6b7280;
+}
+
+/* A forced page break. On screen it is a marked line; in print it is only the break. */
+.lh-body [data-break='page'] {
+  position: relative;
+  height: 0;
+  min-height: 0;
+  margin: 1.1em 0;
+  border-top: 1px dashed #94a3b8;
+  font-size: 0;
+}
+
+.lh-body [data-break='page']::after {
+  content: 'Page break';
+  position: absolute;
+  top: -0.7em;
+  left: 50%;
+  padding: 0 0.6em;
+  background: #fff;
+  color: #64748b;
+  font: 600 10px/1.4 system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.lh-print-root {
+  display: none;
+}
+
+@media print {
+  .lh-print-root {
+    display: block !important;
+  }
+
+  /* A page that stays mounted behind the one being printed must not add its bill to a letterhead print. */
+  body.lh-printing > .bill-print-root {
+    display: none !important;
+  }
+
+  .lh-print-root,
+  .lh-print-root .lh-body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Fixed elements repeat on every printed page; the table's header and footer rows keep the text clear of them. */
+  .lh-print-strip {
+    position: fixed;
+  }
+
+  .lh-print-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .lh-print-table > thead > tr > td,
+  .lh-print-table > tfoot > tr > td,
+  .lh-print-table > tbody > tr > td {
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 0;
+    vertical-align: top;
+  }
+
+  .lh-body [data-break='page'] {
+    margin: 0;
+    border: 0;
+    break-after: page;
+  }
+
+  .lh-body [data-break='page']::after {
+    content: none;
+  }
+
+  .lh-body h2,
+  .lh-body h3 {
+    break-after: avoid;
+  }
+
+  .lh-body tr {
+    break-inside: avoid;
+  }
+}
+
+/*
+ * ETL page. Row outcomes are three validated categorical hues (blue, aqua, orange; never red or green, which mean
+ * failed and succeeded), so a count can be told apart by more than colour: each is always printed beside its name.
+ */
+.etl-root {
+  --etl-inserted: #2a78d6;
+  --etl-updated: #1baf7a;
+  --etl-deleted: #eb6834;
+  --etl-bar: #9db4d4;
+  --etl-bar-hover: #6f8fbb;
+}
+
+.dark .etl-root {
+  --etl-inserted: #3987e5;
+  --etl-updated: #199e70;
+  --etl-deleted: #d95926;
+  --etl-bar: #3b506f;
+  --etl-bar-hover: #5f7ba3;
+}
+
+/* The line between two nodes of the flow. It moves while its pipeline is running. */
+.etl-line {
+  background-image: linear-gradient(90deg, var(--etl-line, var(--orion-border-strong)) 0 100%);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.etl-line[data-state='running'] {
+  background-image: repeating-linear-gradient(90deg, var(--orion-accent) 0 8px, transparent 8px 16px);
+  animation: etl-flow-x 0.9s linear infinite;
+}
+
+.etl-line[data-state='failed'] {
+  background-image: repeating-linear-gradient(90deg, var(--orion-negative) 0 5px, transparent 5px 10px);
+}
+
+@media (max-width: 767px) {
+  .etl-line {
+    background-image: linear-gradient(180deg, var(--etl-line, var(--orion-border-strong)) 0 100%);
+    background-size: 2px 100%;
+  }
+
+  .etl-line[data-state='running'] {
+    background-image: repeating-linear-gradient(180deg, var(--orion-accent) 0 8px, transparent 8px 16px);
+    animation-name: etl-flow-y;
+  }
+
+  .etl-line[data-state='failed'] {
+    background-image: repeating-linear-gradient(180deg, var(--orion-negative) 0 5px, transparent 5px 10px);
+  }
+}
+
+@keyframes etl-flow-x {
+  to {
+    background-position: 16px center;
+  }
+}
+
+@keyframes etl-flow-y {
+  to {
+    background-position: center 16px;
+  }
+}
+
+@keyframes etl-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.etl-pulse {
+  animation: etl-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etl-line[data-state='running'],
+  .etl-pulse {
+    animation: none !important;
+  }
+}
